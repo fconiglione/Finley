@@ -11,7 +11,6 @@ const Footer = () => {
             <div className="flex items-center space-x-3 mb-4">
               <img src="/logo.png" alt="Finley Logo" className="h-8 w-8" />
               <h3 className="text-xl font-bold">Finley</h3>
-              <span className="text-2xl">🤖</span>
             </div>
             <p className="text-gray-400 mb-4 max-w-md">
               Your friendly AI finance buddy! I'm here to make managing money fun, simple, and completely stress-free. 

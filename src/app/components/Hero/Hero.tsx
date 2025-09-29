@@ -21,7 +21,7 @@ const Hero = () => {
           {/* Main Headline */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
             Meet Finley! 
-            <span className="block text-yellow-200">Your Friendly Finance Buddy 🤖💰</span>
+            <span className="block text-yellow-200">Your Friendly Finance Buddy</span>
           </h1>
           
           {/* Subheadline */}
