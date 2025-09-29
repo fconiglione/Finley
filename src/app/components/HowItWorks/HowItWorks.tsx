@@ -4,25 +4,25 @@ import React from 'react';
 const HowItWorks = () => {
   const steps = [
     {
-      step: '1️⃣',
-      title: 'Drop Your Bank Statement',
+      step: '01',
+      title: 'Upload Your Bank Statement',
       description: 'Just drag and drop your CSV or XLSX file! No connecting bank accounts or sharing passwords needed.',
       icon: '📁',
       bgColor: 'bg-gradient-to-br from-purple-400 to-pink-400',
       textColor: 'text-white'
     },
     {
-      step: '2️⃣', 
-      title: 'Watch Me Work My Magic',
-      description: 'I\'ll sort through your expenses faster than you can say "budgeting" - and way more fun too!',
-      icon: '🪄',
+      step: '02', 
+      title: 'AI Analysis',
+      description: 'I\'ll sort through your expenses and identify patterns, subscriptions, and spending trends.',
+      icon: '�',
       bgColor: 'bg-gradient-to-br from-emerald-400 to-teal-500',
       textColor: 'text-white'
     },
     {
-      step: '3️⃣',
-      title: 'Get Your Money Insights',
-      description: 'Receive friendly advice that actually makes sense - no confusing finance jargon, I promise!',
+      step: '03',
+      title: 'Get Your Insights',
+      description: 'Receive clear, actionable financial advice in simple language - no confusing finance jargon.',
       icon: '💡',
       bgColor: 'bg-gradient-to-br from-yellow-400 to-orange-400',
       textColor: 'text-white'
@@ -34,10 +34,10 @@ const HowItWorks = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center mb-16">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            How I'll Help You! 🤝
+            How Finley Works
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Don't worry - I've made this super simple! Just three easy steps and you'll be a money management pro! 
+            Don't worry - I've made this super simple! Just three easy steps and you'll be managing money like a pro. 
           </p>
         </div>
 
@@ -92,7 +92,7 @@ const HowItWorks = () => {
               Join thousands of happy users who've already transformed their finances with my help! 
             </p>
             <button className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white px-8 py-4 rounded-2xl font-bold hover:from-teal-600 hover:to-emerald-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 duration-200 cursor-pointer">
-              Let's Do This Together! 🚀
+              Let's Do This Together!
             </button>
           </div>
         </div>

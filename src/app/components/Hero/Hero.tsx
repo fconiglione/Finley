@@ -33,15 +33,12 @@ const Hero = () => {
           {/* Key Benefits */}
           <div className="flex flex-wrap justify-center gap-6 mb-10 text-sm md:text-base">
             <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-              <span className="text-2xl">🔒</span>
               <span>Super Secure</span>
             </div>
             <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-              <span className="text-2xl">🧠</span>
               <span>AI-Powered</span>
             </div>
             <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-              <span className="text-2xl">🚫</span>
               <span>No Passwords Needed</span>
             </div>
           </div>
@@ -52,13 +49,13 @@ const Hero = () => {
               href="#try-now" 
               className="bg-white text-teal-600 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-yellow-100 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 duration-200 hover:scale-105 cursor-pointer"
             >
-              Let's Get Started! 🚀
+              Let's Get Started!
             </Link>
             <Link 
               href="#how-it-works" 
               className="border-2 border-white text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-white hover:text-teal-600 transition-all cursor-pointer"
             >
-              Show Me How ✨
+              Show Me How
             </Link>
           </div>
           

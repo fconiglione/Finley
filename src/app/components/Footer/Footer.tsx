@@ -17,7 +17,7 @@ const Footer = () => {
               Let's build better money habits together! 💪
             </p>
             <p className="text-gray-400 text-sm">
-              © 2025 Finley. Made with ❤️ for people who want to love their money.
+              © 2025 Finley. All rights reserved.
             </p>
           </div>
           
