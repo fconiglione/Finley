@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 export default function RegisterPage() {
+    const currentYear = new Date().getFullYear();
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -137,6 +138,11 @@ export default function RegisterPage() {
           <p>🔒 Your data is safer than a treasure chest!</p>
           <p>✨ Privacy-first promise - always!</p>
           <p>💡 No bank passwords needed - ever!</p>
+        </div>
+        <div>
+            <div className="text-center text-gray-400 text-xs mt-4">
+                <p>© {currentYear} Finley. All rights reserved.</p>
+            </div>
         </div>
       </div>
     </div>

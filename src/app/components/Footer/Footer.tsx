@@ -2,6 +2,7 @@
 import React from 'react';
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
   return (
     <footer id="feedback" className="bg-gray-900 text-white py-12">
       <div className="container mx-auto px-4">
@@ -17,7 +18,7 @@ const Footer = () => {
               Let's build better money habits together! 💪
             </p>
             <p className="text-gray-400 text-sm">
-              © 2025 Finley. All rights reserved.
+              © {currentYear} Finley. All rights reserved.
             </p>
           </div>
           
