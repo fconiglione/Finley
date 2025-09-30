@@ -38,13 +38,13 @@ const Header = () => {
           {/* CTA Buttons */}
           <div className="flex items-center space-x-5 ml-4">
             <Link 
-              href="#login" 
+              href="/login" 
               className="text-teal-600 hover:text-teal-700 font-medium border border-teal-600 px-4 py-2 rounded-lg hover:bg-teal-50 transition-all cursor-pointer"
             >
               Login
             </Link>
             <Link 
-              href="#try-now" 
+              href="/register" 
               className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white px-6 py-2.5 rounded-2xl hover:from-teal-600 hover:to-emerald-600 transition-all font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 duration-200 cursor-pointer"
             >
               Try It Free!
@@ -102,14 +102,14 @@ const Header = () => {
             </Link>
             <div className="pt-4 border-t border-teal-100 space-y-3">
               <Link 
-                href="#login" 
+                href="/login" 
                 className="block text-teal-600 hover:text-teal-700 transition-colors font-medium py-2 text-center border border-teal-600 rounded-lg hover:bg-teal-50 cursor-pointer"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Login
               </Link>
               <Link 
-                href="#try-now" 
+                href="/register" 
                 className="block bg-gradient-to-r from-teal-500 to-emerald-500 text-white px-6 py-3 rounded-2xl hover:from-teal-600 hover:to-emerald-600 transition-all font-bold text-center cursor-pointer"
                 onClick={() => setIsMenuOpen(false)}
               >
