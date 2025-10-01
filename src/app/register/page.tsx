@@ -26,9 +26,11 @@ export default function RegisterPage() {
         try {
             await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/v1/api/users/register`, payload);
             // Handle successful registration (e.g., redirect or show a success message)
+            window.location.href = '/app/dashboard';
         } catch (error) {
             console.error('Registration failed:', error);
             // Show error message
+            alert('Registration failed. Please try again.');
         } finally {
             setLoading(false);
         }

@@ -1,7 +1,31 @@
+'use client'
+import axios from 'axios';
 import Link from 'next/link'
+import React from 'react'
+import Cookies from 'js-cookie'
 
 export default function LoginPage() {
     const currentYear = new Date().getFullYear();
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [loading, setLoading] = React.useState(false);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+
+       const payload = { email, password };
+
+       try {
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/v1/api/users/login`, payload);
+            window.location.href = '/app/dashboard';
+       } catch (error) {
+        console.error('Login failed:', error);
+        alert('Login failed. Please check your credentials and try again.');
+       } finally {
+        setLoading(false);
+       }
+    }
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -18,7 +42,7 @@ export default function LoginPage() {
 
         {/* Login Form */}
         <div className="bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-8">
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-bold text-gray-900 mb-2">
@@ -32,6 +56,8 @@ export default function LoginPage() {
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200"
                   placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               
@@ -47,6 +73,8 @@ export default function LoginPage() {
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200"
                   placeholder="Your secret password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
             </div>
