@@ -1,7 +1,39 @@
+'use client'
 import Link from 'next/link'
+import axios from "axios"
+import Cookies from 'js-cookie'
+import React from 'react'
 
 export default function RegisterPage() {
     const currentYear = new Date().getFullYear();
+    const [loading, setLoading] = React.useState(false)
+    const [email, setEmail] = React.useState("")
+    const [password, setPassword] = React.useState("")
+    const [confirmPassword, setConfirmPassword] = React.useState("")
+    const [name, setName] = React.useState("")
+
+    const handleRegister = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match!");
+            setLoading(false);
+            return;
+        }
+        const payload = { email, password, name };
+
+        try {
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/v1/api/users/register`, payload);
+            // Handle successful registration (e.g., redirect or show a success message)
+        } catch (error) {
+            console.error('Registration failed:', error);
+            // Show error message
+        } finally {
+            setLoading(false);
+        }
+    }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -18,7 +50,7 @@ export default function RegisterPage() {
 
         {/* Register Form */}
         <div className="bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-8">
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleRegister}>
             <div className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-bold text-gray-900 mb-2">
@@ -32,6 +64,7 @@ export default function RegisterPage() {
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200"
                   placeholder="Your awesome name"
+                  onChange={(e) => setName(e.target.value)} disabled={loading}
                 />
               </div>
 
@@ -47,6 +80,7 @@ export default function RegisterPage() {
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200"
                   placeholder="your@email.com"
+                  onChange={(e) => setEmail(e.target.value)} disabled={loading}
                 />
               </div>
               
@@ -62,6 +96,7 @@ export default function RegisterPage() {
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200"
                   placeholder="Make it strong and memorable!"
+                  onChange={(e) => setPassword(e.target.value)} disabled={loading}
                 />
               </div>
 
@@ -77,6 +112,7 @@ export default function RegisterPage() {
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200"
                   placeholder="Type it again to be sure!"
+                  onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading}
                 />
               </div>
             </div>
