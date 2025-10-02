@@ -24,9 +24,20 @@ export default function RegisterPage() {
         const payload = { email, password, name };
 
         try {
-            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/v1/api/users/register`, payload);
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/v1/api/users/register`, payload)
+            .then((response) => {
+            const { token } = response.data;
+
+            // Store the token in a cookie
+            Cookies.set('token', token, {
+              domain: `${process.env.NEXT_PUBLIC_COOKIE_DOMAIN}`,
+              secure: true,
+              sameSite: 'None',
+              expires: 1
+            });
             // Handle successful registration (e.g., redirect or show a success message)
             window.location.href = '/app/dashboard';
+          });
         } catch (error) {
             console.error('Registration failed:', error);
             // Show error message

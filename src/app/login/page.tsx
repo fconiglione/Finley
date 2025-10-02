@@ -17,7 +17,18 @@ export default function LoginPage() {
        const payload = { email, password };
 
        try {
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/v1/api/users/login`, payload);
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/v1/api/users/login`, payload)
+          .then((response) => {
+            const { token } = response.data;
+
+            // Store the token in a cookie
+            Cookies.set('token', token, {
+              domain: `${process.env.NEXT_PUBLIC_COOKIE_DOMAIN}`,
+              secure: true,
+              sameSite: 'None',
+              expires: 1
+            });
+          });
             window.location.href = '/app/dashboard';
        } catch (error) {
         console.error('Login failed:', error);
