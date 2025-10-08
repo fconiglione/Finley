@@ -10,7 +10,7 @@ interface SidebarProps {
   onToggle?: () => void;
 }
 
-export default function Sidebar({ isOpen = false, onToggle }: SidebarProps) {
+export default function Sidebar({ isOpen = true, onToggle }: SidebarProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(isOpen);
   const [showContent, setShowContent] = useState(isOpen);
   const pathname = usePathname();
@@ -189,6 +189,9 @@ export default function Sidebar({ isOpen = false, onToggle }: SidebarProps) {
                   </svg>
                   <span className="text-emerald-50">Sign Out</span>
                 </button>
+              </div>
+              <div className="mt-6 text-sm text-emerald-100 text-center">
+                &copy; {new Date().getFullYear()} Finley. All rights reserved.
               </div>
             </div>
           </div>
