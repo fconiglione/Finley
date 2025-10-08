@@ -45,7 +45,7 @@ export default function Dashboard() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50">
             <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
-            <div className={`py-24 px-10 transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-80' : 'ml-0'}`}>
+            <div className={`py-28 px-10 transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-80' : 'ml-0'}`}>
                 <div className="bg-white rounded-3xl shadow-lg p-8">
                     <h1 className="text-3xl font-bold text-gray-900 mb-4">
                         Welcome back, {user?.name}! 👋
