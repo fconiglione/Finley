@@ -15,7 +15,7 @@ const Hero = () => {
           {/* Friendly greeting */}
           <div className="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 mb-6">
             <span className="text-2xl mr-2">👋</span>
-            <span className="font-medium">Hey there! Ready to master your money?</span>
+            <span className="font-medium">Hey there! Ready to track your net worth?</span>
           </div>
           
           {/* Main Headline */}
@@ -26,20 +26,20 @@ const Hero = () => {
           
           {/* Subheadline */}
           <p className="text-xl md:text-2xl text-gray-100 mb-8 max-w-3xl mx-auto leading-relaxed">
-            I'll help you understand your spending with simple insights that actually make sense. 
-            Just upload your bank statement and let me do the heavy lifting! 
+            I'll help you track your net worth and understand your financial picture with simple insights that actually make sense. 
+            Just enter your assets and liabilities manually and watch your wealth grow! 
           </p>
           
           {/* Key Benefits */}
           <div className="flex flex-wrap justify-center gap-6 mb-10 text-sm md:text-base">
             <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-              <span>Super Secure</span>
+              <span>🔒 Super Secure</span>
             </div>
             <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-              <span>AI-Powered</span>
+              <span>✏️ Manual Entry</span>
             </div>
             <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-              <span>No Passwords Needed</span>
+              <span>🏦 No Bank Connections</span>
             </div>
           </div>
           
@@ -49,7 +49,7 @@ const Hero = () => {
               href="#try-now" 
               className="bg-white text-teal-600 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-yellow-100 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 duration-200 hover:scale-105 cursor-pointer"
             >
-              Let's Get Started!
+              Start Tracking My Net Worth!
             </Link>
             <Link 
               href="#how-it-works" 
@@ -62,12 +62,12 @@ const Hero = () => {
           {/* Trust Indicators */}
           <div className="mt-12 pt-8 border-t border-white/30">
             <p className="text-gray-200 text-sm mb-4">
-              <span className="text-yellow-200">💝</span> Loved by thousands who wanted to understand their money better
+              <span className="text-yellow-200">💝</span> Loved by thousands who wanted to understand their financial picture
             </p>
             <div className="flex justify-center items-center space-x-8 text-gray-200">
               <div className="flex items-center space-x-2">
                 <span className="text-xl">🛡️</span>
-                <span className="text-sm">Bank-level Security</span>
+                <span className="text-sm">Maximum Privacy</span>
               </div>
               <div className="flex items-center space-x-2">
                 <span className="text-xl">✅</span>
@@ -75,7 +75,7 @@ const Hero = () => {
               </div>
               <div className="flex items-center space-x-2">
                 <span className="text-xl">⚡</span>
-                <span className="text-sm">Results in 30 seconds</span>
+                <span className="text-sm">Track in Minutes</span>
               </div>
             </div>
           </div>
