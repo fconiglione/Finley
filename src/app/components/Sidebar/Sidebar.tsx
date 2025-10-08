@@ -10,14 +10,13 @@ interface SidebarProps {
   onToggle?: () => void;
 }
 
-export default function Sidebar({ isOpen = true, onToggle }: SidebarProps) {
+export default function Sidebar({ isOpen = false, onToggle }: SidebarProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(isOpen);
   const [showContent, setShowContent] = useState(isOpen);
   const pathname = usePathname();
 
   const toggleSidebar = () => {
     if (isSidebarOpen) {
-      // When closing, hide content immediately, then close sidebar
       setShowContent(false);
       setTimeout(() => {
         setIsSidebarOpen(false);
