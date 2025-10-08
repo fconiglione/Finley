@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Cookies from 'js-cookie'
 import Loading from '../../components/Loading/Loading';
 import axios from 'axios';
+import Sidebar from '../../components/Sidebar/Sidebar';
 
 export default function Dashboard() {
     const [user, setUser] = useState<{ name: string; email: string } | null>(null);
@@ -42,6 +43,7 @@ export default function Dashboard() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 p-8">
+            <Sidebar />
             <div className="max-w-4xl mx-auto">
                 <div className="bg-white rounded-3xl shadow-lg p-8">
                     <h1 className="text-3xl font-bold text-gray-900 mb-4">
