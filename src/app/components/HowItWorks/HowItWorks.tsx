@@ -121,10 +121,10 @@ const HowItWorks = () => {
             </div>
             
             <div className="text-center">
-              <button className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white px-8 py-4 rounded-2xl font-bold hover:from-teal-600 hover:to-emerald-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 duration-200 cursor-pointer">
+              <a href="/register" className="inline-block bg-yellow-400 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-yellow-500 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 duration-200 hover:scale-105">
                 Start Tracking My Net Worth!
-              </button>
-              <p className="text-gray-500 text-sm mt-2">Completely free</p>
+              </a>
+              <p className="text-gray-500 text-sm mt-2">No credit card needed • Completely free</p>
             </div>
           </div>
         </div>
