@@ -6,10 +6,219 @@ import axios from 'axios';
 import Sidebar from '../../components/Sidebar/Sidebar';
 
 export default function Settings() {
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [activeTab, setActiveTab] = useState('profile');
+    const [user, setUser] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        timezone: 'America/Toronto',
+        currency: 'CAD',
+        language: 'en'
+    });
+    const [notifications, setNotifications] = useState({
+        emailNotifications: true,
+        securityAlerts: true
+    });
+
+    const tabs = [
+        { id: 'profile', name: 'Profile', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' },
+        { id: 'notifications', name: 'Notifications', icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9' },
+        { id: 'security', name: 'Security', icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z' },
+        { id: 'privacy', name: 'Privacy', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' }
+    ];
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 p-8">
-            <Sidebar />
-            <div>Test</div>
+        <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50">
+            <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
+            
+            {/* Main Content */}
+            <div className={`py-20 px-10 transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-80' : 'ml-0'}`}>
+                {/* Header */}
+                <div className="mb-8">
+                    <h1 className="text-4xl font-bold text-gray-900 mb-2">Settings</h1>
+                    <p className="text-xl text-gray-600">Customize your Finley experience!</p>
+                </div>
+
+                {/* Settings Container */}
+                <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
+                    {/* Tab Navigation */}
+                    <div className="border-b border-gray-200">
+                        <nav className="flex space-x-8 px-6">
+                            {tabs.map((tab) => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`
+                                        flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer
+                                        ${activeTab === tab.id
+                                            ? 'border-emerald-500 text-emerald-600'
+                                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                        }
+                                    `}
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={tab.icon} />
+                                    </svg>
+                                    <span>{tab.name}</span>
+                                </button>
+                            ))}
+                        </nav>
+                    </div>
+
+                    {/* Tab Content */}
+                    <div className="p-6">
+                        {/* Profile Tab */}
+                        {activeTab === 'profile' && (
+                            <div className="space-y-6">
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Profile Information</h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                                            <input
+                                                type="text"
+                                                value={user.name}
+                                                onChange={(e) => setUser({...user, name: e.target.value})}
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                                                placeholder="Enter your full name"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                                            <input
+                                                type="email"
+                                                value={user.email}
+                                                onChange={(e) => setUser({...user, email: e.target.value})}
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                                                placeholder="Enter your email"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                                            <input
+                                                type="tel"
+                                                value={user.phone}
+                                                onChange={(e) => setUser({...user, phone: e.target.value})}
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                                                placeholder="Enter your phone number"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">Timezone</label>
+                                            <select
+                                                value={user.timezone}
+                                                onChange={(e) => setUser({...user, timezone: e.target.value})}
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent cursor-pointer"
+                                            >
+                                                <option value="America/Toronto">Eastern Time (Toronto)</option>
+                                                <option value="America/Vancouver">Pacific Time (Vancouver)</option>
+                                                <option value="America/Edmonton">Mountain Time (Edmonton)</option>
+                                                <option value="America/Winnipeg">Central Time (Winnipeg)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="pt-4">
+                                    <button className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 cursor-pointer">
+                                        Save Changes
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Notifications Tab */}
+                        {activeTab === 'notifications' && (
+                            <div className="space-y-6">
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Notification Preferences</h3>
+                                    <div className="space-y-4">
+                                        {Object.entries(notifications).map(([key, value]) => (
+                                            <div key={key} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                                                <div>
+                                                    <h4 className="font-medium text-gray-900 capitalize">
+                                                        {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                                                    </h4>
+                                                    <p className="text-sm text-gray-600">
+                                                        {key === 'emailNotifications' && 'Receive updates via email'}
+                                                        {key === 'securityAlerts' && 'Important security notifications'}
+                                                    </p>
+                                                </div>
+                                                <label className="relative inline-flex items-center cursor-pointer">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={value}
+                                                        onChange={(e) => setNotifications({...notifications, [key]: e.target.checked})}
+                                                        className="sr-only peer"
+                                                    />
+                                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                                                </label>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Security Tab */}
+                        {activeTab === 'security' && (
+                            <div className="space-y-6">
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Security Settings</h3>
+                                    <div className="space-y-4">
+                                        <div className="p-4 bg-gray-50 rounded-xl">
+                                            <h4 className="font-medium text-gray-900 mb-2">Change Password</h4>
+                                            <p className="text-sm text-gray-600 mb-4">Update your password to keep your account secure</p>
+                                            <button className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-200 cursor-pointer">
+                                                Change Password
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Privacy Tab */}
+                        {activeTab === 'privacy' && (
+                            <div className="space-y-6">
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Privacy Controls</h3>
+                                    <div className="space-y-4">
+                                        <div className="p-4 bg-gray-50 rounded-xl">
+                                            <h4 className="font-medium text-gray-900 mb-2">Data Export</h4>
+                                            <p className="text-sm text-gray-600 mb-4">Download a copy of your financial data</p>
+                                            <button className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-200 cursor-pointer">
+                                                Export Data
+                                            </button>
+                                        </div>
+                                        <div className="p-4 bg-gray-50 rounded-xl">
+                                            <h4 className="font-medium text-gray-900 mb-2">Delete Account</h4>
+                                            <p className="text-sm text-gray-600 mb-4">Permanently delete your account and all data</p>
+                                            <button className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-200 cursor-pointer">
+                                                Delete Account
+                                            </button>
+                                        </div>
+                                        <div className="p-4 bg-yellow-50 rounded-xl border border-yellow-200">
+                                            <div className="flex items-start space-x-3">
+                                                <svg className="w-5 h-5 text-yellow-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                                </svg>
+                                                <div>
+                                                    <h4 className="font-medium text-yellow-800 mb-1">Privacy Notice</h4>
+                                                    <p className="text-sm text-yellow-700">
+                                                        Your financial data is encrypted and never shared with third parties. 
+                                                        Read our <a href="/legal/privacy" className='underline' target="_blank">Privacy Policy</a>  for more details.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }

@@ -33,15 +33,19 @@ export default function Sidebar({ isOpen = true, onToggle }: SidebarProps) {
 
   // Move logout function outside useEffect and make it async
   const handleLogout = async () => {
-    const token = Cookies.get('token');
-    if (token) {
-      Cookies.remove('token', {
-        domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
-        secure: true,
-        sameSite: 'None',
-      });
+    if(confirm("Are you sure you want to log out?")) {
+      const token = Cookies.get('token');
+      if (token) {
+        Cookies.remove('token', {
+          domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
+          secure: true,
+          sameSite: 'None',
+        });
+      }
+      window.location.href = '/login';
+    } else {
+      return;
     }
-    window.location.href = '/login';
   };
 
   const navigationItems = [

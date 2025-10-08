@@ -33,6 +33,16 @@ const Footer = () => {
           </div>
         </div>
         
+        {/* Bottom Bar with Legal Links */}
+        <div className="border-t border-gray-700 pt-4 pb-4">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div className="flex flex-wrap items-center space-x-6 text-sm text-gray-400">
+              <a href="/legal/privacy" className="hover:text-white transition-colors cursor-pointer">Privacy Policy</a>
+              <a href="/legal/terms" className="hover:text-white transition-colors cursor-pointer">Terms of Service</a>
+            </div>
+          </div>
+        </div>
+        
         {/* Legal Disclaimer Section */}
         <div className="border-t border-gray-700 pt-8">
           <div className="bg-gray-800 p-6 rounded-lg border border-yellow-500/30">
