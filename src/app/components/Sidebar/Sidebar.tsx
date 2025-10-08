@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -29,6 +30,19 @@ export default function Sidebar({ isOpen = true, onToggle }: SidebarProps) {
       }, 150);
     }
     onToggle?.();
+  };
+
+  // Move logout function outside useEffect and make it async
+  const handleLogout = async () => {
+    const token = Cookies.get('token');
+    if (token) {
+      Cookies.remove('token', {
+        domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
+        secure: true,
+        sameSite: 'None',
+      });
+    }
+    window.location.href = '/login';
   };
 
   const navigationItems = [
@@ -169,8 +183,8 @@ export default function Sidebar({ isOpen = true, onToggle }: SidebarProps) {
                   </svg>
                   <span className="text-emerald-50">Settings</span>
                 </Link>
-                
-                <button className="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 transition-colors w-full text-left cursor-pointer">
+
+                <button onClick={handleLogout} className="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 transition-colors w-full text-left cursor-pointer">
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                   </svg>
