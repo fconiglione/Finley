@@ -153,6 +153,7 @@ export default function NetWorth() {
     };
 
     const deleteAsset = async (id: string) => {
+        if (!confirm('Are you sure you want to delete this asset?')) return;
         try {
             const token = Cookies.get('token');
             const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -231,6 +232,7 @@ export default function NetWorth() {
     };
 
     const deleteLiability = async (id: string) => {
+        if (!confirm('Are you sure you want to delete this liability?')) return;
         try {
             const token = Cookies.get('token');
             const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
