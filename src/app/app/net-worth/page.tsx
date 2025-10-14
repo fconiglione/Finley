@@ -6,13 +6,33 @@ import axios from 'axios';
 import Sidebar from '../../components/Sidebar/Sidebar';
 
 export default function NetWorth() {
-    const [assets, setAssets] = useState([]);
-    const [liabilities, setLiabilities] = useState([]);
+    interface Asset {
+        id: string;
+        name: string;
+        current_value: string;
+        description?: string;
+        category: string;
+    }
+
+    const [assets, setAssets] = useState<Asset[]>([]);
+    interface Liability {
+        id: string;
+        name: string;
+        current_value: string;
+        description?: string;
+        category: string;
+    }
+    
+    const [liabilities, setLiabilities] = useState<Liability[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [showAddAsset, setShowAddAsset] = useState(false);
     const [showAddLiability, setShowAddLiability] = useState(false);
     const [selectedAssetCategory, setSelectedAssetCategory] = useState('');
     const [selectedLiabilityCategory, setSelectedLiabilityCategory] = useState('');
     const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [newAsset, setNewAsset] = useState({ name: '', current_value: '', description: '' });
+    const [newLiability, setNewLiability] = useState({ name: '', current_value: '', description: '' });
 
     const assetCategories = [
         { id: 'cash_accounts', name: 'Cash & Cash Equivalents', color: 'green', items: [] },
@@ -36,10 +56,230 @@ export default function NetWorth() {
         { id: 'other_debts', name: 'Other Debts', color: 'zinc', items: [] }
     ];
 
-    // Calculate totals
-    const totalAssets = assets.reduce((sum, asset) => sum + (asset || 0), 0);
-    const totalLiabilities = liabilities.reduce((sum, liability) => sum + (liability || 0), 0);
+    // Fetch data from backend
+    useEffect(() => {
+        fetchNetWorthData();
+    }, []);
+
+    const fetchNetWorthData = async () => {
+        try {
+            setLoading(true);
+            const token = Cookies.get('token');
+            
+            if (!token) {
+                setError('Please log in to view your net worth data.');
+                setLoading(false);
+                return;
+            }
+            
+            const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            
+            const response = await axios.get(`${baseURL}/v1/api/data/all`, {
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            setAssets(response.data.assets || []);
+            setLiabilities(response.data.liabilities || []);
+            setError(null);
+        } catch (error) {
+            console.error('Error fetching net worth data:', error);
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                setError('Please log in again to access your data.');
+            } else {
+                setError('Failed to load your net worth data. Please try again.');
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const addAsset = async (assetData: Omit<Asset, 'id' | 'category'>) => {
+        try {
+            const token = Cookies.get('token');
+            const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            
+            const response = await axios.post(`${baseURL}/v1/api/data/assets`, {
+                ...assetData,
+                category: selectedAssetCategory,
+                subcategory: selectedAssetCategory
+            }, {
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            setAssets([...assets, response.data.asset]);
+            setShowAddAsset(false);
+            setNewAsset({ name: '', current_value: '', description: '' });
+        } catch (error) {
+            console.error('Error adding asset:', error);
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                setError('Please log in again to access your data.');
+            } else {
+                setError('Failed to add asset. Please try again.');
+            }
+        }
+    };
+
+    const updateAsset = async (id: string, assetData: Partial<Asset>) => {
+        try {
+            const token = Cookies.get('token');
+            const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            
+            const response = await axios.put(`${baseURL}/v1/api/data/assets/${id}`, {
+                ...assetData,
+                category: assetData.category || selectedAssetCategory,
+                subcategory: assetData.category || selectedAssetCategory
+            }, {
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            setAssets(assets.map(asset => asset.id === id ? response.data.asset : asset));
+        } catch (error) {
+            console.error('Error updating asset:', error);
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                setError('Please log in again to access your data.');
+            } else {
+                setError('Failed to update asset. Please try again.');
+            }
+        }
+    };
+
+    const deleteAsset = async (id: string) => {
+        try {
+            const token = Cookies.get('token');
+            const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            
+            await axios.delete(`${baseURL}/v1/api/data/assets/${id}`, {
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            setAssets(assets.filter(asset => asset.id !== id));
+        } catch (error) {
+            console.error('Error deleting asset:', error);
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                setError('Please log in again to access your data.');
+            } else {
+                setError('Failed to delete asset. Please try again.');
+            }
+        }
+    };
+
+    const addLiability = async (liabilityData: Omit<Liability, 'id' | 'category'>) => {
+        try {
+            const token = Cookies.get('token');
+            const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            
+            const response = await axios.post(`${baseURL}/v1/api/data/liabilities`, {
+                ...liabilityData,
+                category: selectedLiabilityCategory,
+                subcategory: selectedLiabilityCategory
+            }, {
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            setLiabilities([...liabilities, response.data.liability]);
+            setShowAddLiability(false);
+            setNewLiability({ name: '', current_value: '', description: '' });
+        } catch (error) {
+            console.error('Error adding liability:', error);
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                setError('Please log in again to access your data.');
+            } else {
+                setError('Failed to add liability. Please try again.');
+            }
+        }
+    };
+
+    const updateLiability = async (id: string, liabilityData: Partial<Liability>) => {
+        try {
+            const token = Cookies.get('token');
+            const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            
+            const response = await axios.put(`${baseURL}/v1/api/data/liabilities/${id}`, {
+                ...liabilityData,
+                category: liabilityData.category || selectedLiabilityCategory,
+                subcategory: liabilityData.category || selectedLiabilityCategory
+            }, {
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            setLiabilities(liabilities.map(liability => liability.id === id ? response.data.liability : liability));
+        } catch (error) {
+            console.error('Error updating liability:', error);
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                setError('Please log in again to access your data.');
+            } else {
+                setError('Failed to update liability. Please try again.');
+            }
+        }
+    };
+
+    const deleteLiability = async (id: string) => {
+        try {
+            const token = Cookies.get('token');
+            const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            
+            await axios.delete(`${baseURL}/v1/api/data/liabilities/${id}`, {
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            setLiabilities(liabilities.filter(liability => liability.id !== id));
+        } catch (error) {
+            console.error('Error deleting liability:', error);
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                setError('Please log in again to access your data.');
+            } else {
+                setError('Failed to delete liability. Please try again.');
+            }
+        }
+    };
+
+    // Group assets by category
+    const groupedAssets = assetCategories.map(category => ({
+        ...category,
+        items: assets.filter(asset => asset.category === category.id)
+    }));
+
+    // Group liabilities by category
+    const groupedLiabilities = liabilityCategories.map(category => ({
+        ...category,
+        items: liabilities.filter(liability => liability.category === category.id)
+    }));
+
+    // Calculate totals with safe parsing
+    const totalAssets = assets.reduce((sum, asset) => {
+        const value = parseFloat(asset?.current_value || '0');
+        return sum + (isNaN(value) ? 0 : value);
+    }, 0);
+    
+    const totalLiabilities = liabilities.reduce((sum, liability) => {
+        const value = parseFloat(liability?.current_value || '0');
+        return sum + (isNaN(value) ? 0 : value);
+    }, 0);
+    
     const netWorth = totalAssets - totalLiabilities;
+
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50">
@@ -47,6 +287,19 @@ export default function NetWorth() {
 
             {/* Main Content */}
             <div className={`py-28 px-10 transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-80' : 'ml-0'}`}>
+                {/* Error Message */}
+                {error && (
+                    <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+                        <p className="text-red-700">{error}</p>
+                        <button 
+                            onClick={() => setError(null)}
+                            className="text-red-500 hover:text-red-700 text-sm underline mt-2"
+                        >
+                            Dismiss
+                        </button>
+                    </div>
+                )}
+
                 {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-4xl font-bold text-gray-900 mb-2">Your Net Worth</h1>
@@ -95,9 +348,9 @@ export default function NetWorth() {
                             </div>
                         </div>
 
-                        {/* Asset Categories - All Predefined */}
+                        {/* Asset Categories - Dynamic */}
                         <div className="space-y-6">
-                            {assetCategories.map((category) => (
+                            {groupedAssets.map((category) => (
                                 <div key={category.id} className={`border-l-4 border-${category.color}-400 pl-4`}>
                                     <div className="flex items-center justify-between mb-3">
                                         <h4 className="font-semibold text-gray-900">{category.name}</h4>
@@ -113,77 +366,26 @@ export default function NetWorth() {
                                     </div>
                                     
                                     <div className="space-y-2">
-                                        {/* Example items - replace with dynamic data */}
-                                        {category.id === 'cash_accounts' && (
-                                            <>
-                                                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group cursor-pointer">
-                                                    <span className="text-gray-700">Checking Account</span>
+                                        {category.items.length > 0 ? (
+                                            category.items.map((asset) => (
+                                                <div key={asset.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group cursor-pointer">
+                                                    <span className="text-gray-700">{asset.name}</span>
                                                     <div className="flex items-center space-x-2">
-                                                        <span className="font-semibold">$5,250.00</span>
-                                                        <button className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-all cursor-pointer">
+                                                        <span className="font-semibold">
+                                                            ${parseFloat(asset.current_value).toLocaleString('en-CA', { minimumFractionDigits: 2 })}
+                                                        </span>
+                                                        <button 
+                                                            onClick={() => deleteAsset(asset.id)}
+                                                            className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-all cursor-pointer"
+                                                        >
                                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                             </svg>
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group cursor-pointer">
-                                                    <span className="text-gray-700">Savings Account</span>
-                                                    <div className="flex items-center space-x-2">
-                                                        <span className="font-semibold">$15,750.00</span>
-                                                        <button className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-all cursor-pointer">
-                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </>
-                                        )}
-                                        
-                                        {category.id === 'retirement_plans' && (
-                                            <>
-                                                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group cursor-pointer">
-                                                    <span className="text-gray-700">RRSP</span>
-                                                    <div className="flex items-center space-x-2">
-                                                        <span className="font-semibold">$45,000.00</span>
-                                                        <button className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-all cursor-pointer">
-                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group cursor-pointer">
-                                                    <span className="text-gray-700">TFSA</span>
-                                                    <div className="flex items-center space-x-2">
-                                                        <span className="font-semibold">$25,000.00</span>
-                                                        <button className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-all cursor-pointer">
-                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </>
-                                        )}
-
-                                        {category.id === 'real_estate' && (
-                                            <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group cursor-pointer">
-                                                <span className="text-gray-700">Primary Residence</span>
-                                                <div className="flex items-center space-x-2">
-                                                    <span className="font-semibold">$650,000.00</span>
-                                                    <button className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-all cursor-pointer">
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {/* Empty state for categories with no items */}
-                                        {(category.id === 'investments' || category.id === 'vehicles' || category.id === 'personal_property' || category.id === 'business_interests' || category.id === 'other_assets') && (
+                                            ))
+                                        ) : (
                                             <div className="p-4 border-2 border-dashed border-gray-200 rounded-xl text-center">
                                                 <p className="text-gray-500 text-sm">No items added yet</p>
                                                 <p className="text-gray-400 text-xs mt-1">Click "Add" to add your first {category.name.toLowerCase()}</p>
@@ -220,9 +422,9 @@ export default function NetWorth() {
                             </div>
                         </div>
 
-                        {/* Liability Categories - All Predefined */}
+                        {/* Liability Categories - Dynamic */}
                         <div className="space-y-6">
-                            {liabilityCategories.map((category) => (
+                            {groupedLiabilities.map((category) => (
                                 <div key={category.id} className={`border-l-4 border-${category.color}-400 pl-4`}>
                                     <div className="flex items-center justify-between mb-3">
                                         <h4 className="font-semibold text-gray-900">{category.name}</h4>
@@ -238,51 +440,26 @@ export default function NetWorth() {
                                     </div>
                                     
                                     <div className="space-y-2">
-                                        {/* Example items - replace with dynamic data */}
-                                        {category.id === 'credit_cards' && (
-                                            <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group cursor-pointer">
-                                                <span className="text-gray-700">Visa Credit Card</span>
-                                                <div className="flex items-center space-x-2">
-                                                    <span className="font-semibold text-red-600">$3,250.00</span>
-                                                    <button className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-all cursor-pointer">
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                        </svg>
-                                                    </button>
+                                        {category.items.length > 0 ? (
+                                            category.items.map((liability) => (
+                                                <div key={liability.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group cursor-pointer">
+                                                    <span className="text-gray-700">{liability.name}</span>
+                                                    <div className="flex items-center space-x-2">
+                                                        <span className="font-semibold text-red-600">
+                                                            ${parseFloat(liability.current_value).toLocaleString('en-CA', { minimumFractionDigits: 2 })}
+                                                        </span>
+                                                        <button 
+                                                            onClick={() => deleteLiability(liability.id)}
+                                                            className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-all cursor-pointer"
+                                                        >
+                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        )}
-
-                                        {category.id === 'mortgages' && (
-                                            <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group cursor-pointer">
-                                                <span className="text-gray-700">Primary Residence Mortgage</span>
-                                                <div className="flex items-center space-x-2">
-                                                    <span className="font-semibold text-red-600">$425,000.00</span>
-                                                    <button className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-all cursor-pointer">
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {category.id === 'auto_loans' && (
-                                            <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group cursor-pointer">
-                                                <span className="text-gray-700">Car Loan</span>
-                                                <div className="flex items-center space-x-2">
-                                                    <span className="font-semibold text-red-600">$18,500.00</span>
-                                                    <button className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-all cursor-pointer">
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {/* Empty state for categories with no items */}
-                                        {(category.id === 'lines_of_credit' || category.id === 'student_loans' || category.id === 'personal_loans' || category.id === 'business_loans' || category.id === 'other_debts') && (
+                                            ))
+                                        ) : (
                                             <div className="p-4 border-2 border-dashed border-gray-200 rounded-xl text-center">
                                                 <p className="text-gray-500 text-sm">No items added yet</p>
                                                 <p className="text-gray-400 text-xs mt-1">Click "Add" to add your first {category.name.toLowerCase()}</p>
@@ -324,6 +501,130 @@ export default function NetWorth() {
                     </div>
                 </div>
             </div>
+
+            {/* Add Asset Modal */}
+            {showAddAsset && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+                        <h3 className="text-xl font-bold mb-4">Add Asset</h3>
+                        <form onSubmit={(e) => {
+                            e.preventDefault();
+                            addAsset(newAsset);
+                        }}>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                                <input
+                                    type="text"
+                                    value={newAsset.name}
+                                    onChange={(e) => setNewAsset({ ...newAsset, name: e.target.value })}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    required
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Value ($)</label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    value={newAsset.current_value}
+                                    onChange={(e) => setNewAsset({ ...newAsset, current_value: e.target.value })}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    required
+                                />
+                            </div>
+                            <div className="mb-6">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
+                                <textarea
+                                    value={newAsset.description}
+                                    onChange={(e) => setNewAsset({ ...newAsset, description: e.target.value })}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    rows={3}
+                                />
+                            </div>
+                            <div className="flex space-x-3">
+                                <button
+                                    type="submit"
+                                    className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                                >
+                                    Add Asset
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setShowAddAsset(false);
+                                        setNewAsset({ name: '', current_value: '', description: '' });
+                                    }}
+                                    className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-400 transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Add Liability Modal */}
+            {showAddLiability && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+                        <h3 className="text-xl font-bold mb-4">Add Liability</h3>
+                        <form onSubmit={(e) => {
+                            e.preventDefault();
+                            addLiability(newLiability);
+                        }}>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                                <input
+                                    type="text"
+                                    value={newLiability.name}
+                                    onChange={(e) => setNewLiability({ ...newLiability, name: e.target.value })}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                    required
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Amount Owed ($)</label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    value={newLiability.current_value}
+                                    onChange={(e) => setNewLiability({ ...newLiability, current_value: e.target.value })}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                    required
+                                />
+                            </div>
+                            <div className="mb-6">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
+                                <textarea
+                                    value={newLiability.description}
+                                    onChange={(e) => setNewLiability({ ...newLiability, description: e.target.value })}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                    rows={3}
+                                />
+                            </div>
+                            <div className="flex space-x-3">
+                                <button
+                                    type="submit"
+                                    className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-red-700 transition-colors"
+                                >
+                                    Add Liability
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setShowAddLiability(false);
+                                        setNewLiability({ name: '', current_value: '', description: '' });
+                                    }}
+                                    className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-400 transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
