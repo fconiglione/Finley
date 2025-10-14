@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -13,7 +14,33 @@ interface SidebarProps {
 export default function Sidebar({ isOpen = true, onToggle }: SidebarProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(isOpen);
   const [showContent, setShowContent] = useState(isOpen);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const token = Cookies.get('token');
+      if (token) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+        router.push('/login');
+      }
+      setIsLoading(false);
+    };
+
+    checkAuth();
+  }, [router]);
+
+  if (isLoading) {
+    return null;
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   const toggleSidebar = () => {
     if (isSidebarOpen) {
@@ -37,14 +64,13 @@ export default function Sidebar({ isOpen = true, onToggle }: SidebarProps) {
       const token = Cookies.get('token');
       if (token) {
         Cookies.remove('token', {
+          path: '/',
           domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
-          secure: true,
-          sameSite: 'None',
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
         });
       }
-      window.location.href = '/login';
-    } else {
-      return;
+      router.push('/login');
     }
   };
 
