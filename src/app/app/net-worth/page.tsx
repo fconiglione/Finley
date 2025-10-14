@@ -28,8 +28,12 @@ export default function NetWorth() {
     const [error, setError] = useState<string | null>(null);
     const [showAddAsset, setShowAddAsset] = useState(false);
     const [showAddLiability, setShowAddLiability] = useState(false);
+    const [showEditAsset, setShowEditAsset] = useState(false);
+    const [showEditLiability, setShowEditLiability] = useState(false);
     const [selectedAssetCategory, setSelectedAssetCategory] = useState('');
     const [selectedLiabilityCategory, setSelectedLiabilityCategory] = useState('');
+    const [editingAsset, setEditingAsset] = useState<Asset | null>(null);
+    const [editingLiability, setEditingLiability] = useState<Liability | null>(null);
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [newAsset, setNewAsset] = useState({ name: '', current_value: '', description: '' });
     const [newLiability, setNewLiability] = useState({ name: '', current_value: '', description: '' });
@@ -142,6 +146,10 @@ export default function NetWorth() {
             });
             
             setAssets(assets.map(asset => asset.id === id ? response.data.asset : asset));
+            
+            // Close the edit modal after successful update
+            setShowEditAsset(false);
+            setEditingAsset(null);
         } catch (error) {
             console.error('Error updating asset:', error);
             if (axios.isAxiosError(error) && error.response?.status === 401) {
@@ -173,6 +181,16 @@ export default function NetWorth() {
                 setError('Failed to delete asset. Please try again.');
             }
         }
+    };
+
+    const handleEditAsset = (asset: Asset) => {
+        setEditingAsset(asset);
+        setShowEditAsset(true);
+    };
+
+    const handleEditLiability = (liability: Liability) => {
+        setEditingLiability(liability);
+        setShowEditLiability(true);
     };
 
     const addLiability = async (liabilityData: Omit<Liability, 'id' | 'category'>) => {
@@ -221,6 +239,10 @@ export default function NetWorth() {
             });
             
             setLiabilities(liabilities.map(liability => liability.id === id ? response.data.liability : liability));
+            
+            // Close the edit modal after successful update
+            setShowEditLiability(false);
+            setEditingLiability(null);
         } catch (error) {
             console.error('Error updating liability:', error);
             if (axios.isAxiosError(error) && error.response?.status === 401) {
@@ -371,13 +393,24 @@ export default function NetWorth() {
                                         {category.items.length > 0 ? (
                                             category.items.map((asset) => (
                                                 <div key={asset.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group cursor-pointer">
-                                                    <span className="text-gray-700">{asset.name}</span>
+                                                    <span 
+                                                        className="text-gray-700 flex-1 cursor-pointer"
+                                                        onClick={() => handleEditAsset(asset)}
+                                                    >
+                                                        {asset.name}
+                                                    </span>
                                                     <div className="flex items-center space-x-2">
-                                                        <span className="font-semibold">
+                                                        <span 
+                                                            className="font-semibold cursor-pointer"
+                                                            onClick={() => handleEditAsset(asset)}
+                                                        >
                                                             ${parseFloat(asset.current_value).toLocaleString('en-CA', { minimumFractionDigits: 2 })}
                                                         </span>
                                                         <button 
-                                                            onClick={() => deleteAsset(asset.id)}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                deleteAsset(asset.id);
+                                                            }}
                                                             className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-all cursor-pointer"
                                                         >
                                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -445,13 +478,24 @@ export default function NetWorth() {
                                         {category.items.length > 0 ? (
                                             category.items.map((liability) => (
                                                 <div key={liability.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group cursor-pointer">
-                                                    <span className="text-gray-700">{liability.name}</span>
+                                                    <span 
+                                                        className="text-gray-700 flex-1 cursor-pointer"
+                                                        onClick={() => handleEditLiability(liability)}
+                                                    >
+                                                        {liability.name}
+                                                    </span>
                                                     <div className="flex items-center space-x-2">
-                                                        <span className="font-semibold text-red-600">
+                                                        <span 
+                                                            className="font-semibold text-red-600 cursor-pointer"
+                                                            onClick={() => handleEditLiability(liability)}
+                                                        >
                                                             ${parseFloat(liability.current_value).toLocaleString('en-CA', { minimumFractionDigits: 2 })}
                                                         </span>
                                                         <button 
-                                                            onClick={() => deleteLiability(liability.id)}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                deleteLiability(liability.id);
+                                                            }}
                                                             className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-all cursor-pointer"
                                                         >
                                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -617,6 +661,134 @@ export default function NetWorth() {
                                     onClick={() => {
                                         setShowAddLiability(false);
                                         setNewLiability({ name: '', current_value: '', description: '' });
+                                    }}
+                                    className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-400 transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Edit Asset Modal */}
+            {showEditAsset && editingAsset && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+                        <h3 className="text-xl font-bold mb-4">Edit Asset</h3>
+                        <form onSubmit={(e) => {
+                            e.preventDefault();
+                            if (editingAsset) {
+                                updateAsset(editingAsset.id, editingAsset);
+                            }
+                        }}>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                                <input
+                                    type="text"
+                                    value={editingAsset.name}
+                                    onChange={(e) => setEditingAsset({ ...editingAsset, name: e.target.value })}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    required
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Value ($)</label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    value={editingAsset.current_value}
+                                    onChange={(e) => setEditingAsset({ ...editingAsset, current_value: e.target.value })}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    required
+                                />
+                            </div>
+                            <div className="mb-6">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
+                                <textarea
+                                    value={editingAsset.description || ''}
+                                    onChange={(e) => setEditingAsset({ ...editingAsset, description: e.target.value })}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    rows={3}
+                                />
+                            </div>
+                            <div className="flex space-x-3">
+                                <button
+                                    type="submit"
+                                    className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                                >
+                                    Update Asset
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setShowEditAsset(false);
+                                        setEditingAsset(null);
+                                    }}
+                                    className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-400 transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Edit Liability Modal */}
+            {showEditLiability && editingLiability && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+                        <h3 className="text-xl font-bold mb-4">Edit Liability</h3>
+                        <form onSubmit={(e) => {
+                            e.preventDefault();
+                            if (editingLiability) {
+                                updateLiability(editingLiability.id, editingLiability);
+                            }
+                        }}>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                                <input
+                                    type="text"
+                                    value={editingLiability.name}
+                                    onChange={(e) => setEditingLiability({ ...editingLiability, name: e.target.value })}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                    required
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Amount Owed ($)</label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    value={editingLiability.current_value}
+                                    onChange={(e) => setEditingLiability({ ...editingLiability, current_value: e.target.value })}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                    required
+                                />
+                            </div>
+                            <div className="mb-6">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
+                                <textarea
+                                    value={editingLiability.description || ''}
+                                    onChange={(e) => setEditingLiability({ ...editingLiability, description: e.target.value })}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                    rows={3}
+                                />
+                            </div>
+                            <div className="flex space-x-3">
+                                <button
+                                    type="submit"
+                                    className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-red-700 transition-colors"
+                                >
+                                    Update Liability
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setShowEditLiability(false);
+                                        setEditingLiability(null);
                                     }}
                                     className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-400 transition-colors"
                                 >
