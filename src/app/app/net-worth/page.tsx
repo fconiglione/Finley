@@ -14,7 +14,6 @@ export default function NetWorth() {
     const [selectedLiabilityCategory, setSelectedLiabilityCategory] = useState('');
     const [sidebarOpen, setSidebarOpen] = useState(true);
 
-    // CIBC Net Worth Calculator Asset Categories
     const assetCategories = [
         { id: 'cash_accounts', name: 'Cash & Cash Equivalents', color: 'green', items: [] },
         { id: 'investments', name: 'Investments', color: 'blue', items: [] },
@@ -26,7 +25,6 @@ export default function NetWorth() {
         { id: 'other_assets', name: 'Other Assets', color: 'emerald', items: [] }
     ];
 
-    // CIBC Net Worth Calculator Liability Categories
     const liabilityCategories = [
         { id: 'credit_cards', name: 'Credit Cards', color: 'red', items: [] },
         { id: 'lines_of_credit', name: 'Lines of Credit', color: 'orange', items: [] },

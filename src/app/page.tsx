@@ -23,14 +23,6 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {/* Feature 1 */}
-            <div className="text-center p-6 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="w-16 h-16 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-3xl">🛡️</span>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Super Secure!</h3>
-              <p className="text-gray-600">Your financial data is safer than a treasure chest! I protect everything with bank-level security.</p>
-            </div>
 
             {/* Feature 2 */}
             <div className="text-center p-6 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
@@ -39,24 +31,6 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-4">Net Worth Tracking!</h3>
               <p className="text-gray-600">Easily track all your assets and liabilities in one place - watch your net worth grow over time!</p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="text-center p-6 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="w-16 h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-3xl">💬</span>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">I Speak Human!</h3>
-              <p className="text-gray-600">No confusing finance jargon here! I explain everything in simple, friendly language you'll actually understand.</p>
-            </div>
-
-            {/* Feature 4 */}
-            <div className="text-center p-6 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-3xl">🏦</span>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">CIBC Categories!</h3>
-              <p className="text-gray-600">Organize your finances using the same categories as CIBC's net worth calculator - familiar and professional!</p>
             </div>
 
             {/* Feature 5 */}
