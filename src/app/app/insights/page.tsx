@@ -223,7 +223,7 @@ export default function Insights() {
                         
                         <div className="text-center mt-3">
                             <p className="text-xs text-gray-500">
-                                Finley analyzes your net worth data to provide personalized insights
+                                Due to privacy restrictions, chats are not stored and can only be accessed during your current session.
                             </p>
                         </div>
                     </div>
