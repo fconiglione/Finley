@@ -55,12 +55,22 @@ export default function Insights() {
 
         // Simulate API call to your Python backend
         try {
+            const token = Cookies.get('token');
+            if (!token) {
+                window.location.href = '/login';
+                return;
+            }
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/v1/api/insights/`, { message: messageToSend }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             // Replace this with your actual API call
             setTimeout(() => {
                 const botResponse = {
                     id: Date.now() + 1,
                     type: 'bot',
-                    message: "Thanks for your question! I'm analyzing your net worth data and will provide insights based on your financial information. This is where I'll connect to your Python API to give you personalized advice! 📊",
+                    message: response.data.message,
                     timestamp: new Date()
                 };
                 setMessages(prev => [...prev, botResponse]);
