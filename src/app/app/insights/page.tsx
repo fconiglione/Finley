@@ -77,21 +77,6 @@ export default function Insights() {
                 setIsTyping(false);
             }, 2000);
 
-            // Actual API call would look like:
-            // const response = await axios.post('/api/chat', {
-            //     message: messageToSend,
-            //     userId: Cookies.get('userId') // or however you identify users
-            // });
-            // 
-            // const botResponse = {
-            //     id: Date.now() + 1,
-            //     type: 'bot',
-            //     message: response.data.message,
-            //     timestamp: new Date()
-            // };
-            // setMessages(prev => [...prev, botResponse]);
-            // setIsTyping(false);
-
         } catch (error) {
             console.error('Error sending message:', error);
             const errorResponse = {
@@ -120,7 +105,7 @@ export default function Insights() {
             <div className={`transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-80' : 'ml-0'}`}>
                 <div className="flex flex-col h-screen">
                     {/* Header */}
-                    <div className="bg-white shadow-sm border-b p-6">
+                    <div className={`bg-white shadow-sm border-b p-6 transition-all duration-300 ease-in-out ${!sidebarOpen ? 'pl-[8%]' : ''}`}>
                         <div className="flex items-center space-x-4">
                             <div className="w-12 h-12 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full flex items-center justify-center p-2">
                                 <img src="/logo.png" alt="Finley" className="w-full h-full object-contain" />
@@ -133,7 +118,7 @@ export default function Insights() {
                     </div>
 
                     {/* Chat Messages */}
-                    <div className="flex-1 overflow-y-auto p-6 space-y-4">
+                    <div className={`flex-1 overflow-y-auto p-6 space-y-4 ${!sidebarOpen ? 'pl-[8%]' : ''}`}>
                         {messages.map((message) => (
                             <div key={message.id} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                                 <div className={`flex items-start space-x-3 max-w-2xl ${message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
@@ -190,7 +175,7 @@ export default function Insights() {
 
                     {/* Suggested Questions (show when conversation is short) */}
                     {messages.length <= 2 && (
-                        <div className="px-6 pb-4">
+                        <div className={`px-6 pb-4 ${!sidebarOpen ? 'pl-[8%]' : ''}`}>
                             <p className="text-sm text-gray-600 mb-3">💡 Try asking me:</p>
                             <div className="flex flex-wrap gap-2">
                                 {suggestedQuestions.map((question, index) => (
@@ -207,7 +192,7 @@ export default function Insights() {
                     )}
 
                     {/* Input Area */}
-                    <div className="bg-white border-t p-6">
+                    <div className={`bg-white border-t p-6 ${!sidebarOpen ? 'pl-[8%]' : ''}`}>
                         <div className="flex items-end space-x-4 max-w-4xl mx-auto">
                             <div className="flex-1">
                                 <textarea
