@@ -22,13 +22,14 @@ export default function LoginPage() {
           .then((response) => {
             const { token } = response.data;
 
-            // Store the token in a cookie
-            Cookies.set('token', token, {
-              domain: `${process.env.NEXT_PUBLIC_COOKIE_DOMAIN}`,
-              secure: true,
-              sameSite: 'None',
-              expires: 1
-            });
+            // Store the token in a cookie - REMOVED - switching to local storage for development
+            localStorage.setItem('token', token);
+            // Cookies.set('token', token, {
+            //   domain: `${process.env.NEXT_PUBLIC_COOKIE_DOMAIN}`,
+            //   secure: true,
+            //   sameSite: 'None',
+            //   expires: 1
+            // });
           });
             window.location.href = '/app/dashboard';
        } catch (error) {

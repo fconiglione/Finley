@@ -21,7 +21,8 @@ export default function Sidebar({ isOpen = true, onToggle }: SidebarProps) {
 
   useEffect(() => {
     const checkAuth = () => {
-      const token = Cookies.get('token');
+      // const token = Cookies.get('token');
+      const token = localStorage.getItem('token');
       if (token) {
         setIsAuthenticated(true);
       } else {
@@ -61,14 +62,16 @@ export default function Sidebar({ isOpen = true, onToggle }: SidebarProps) {
   // Move logout function outside useEffect and make it async
   const handleLogout = async () => {
     if(confirm("Are you sure you want to log out?")) {
-      const token = Cookies.get('token');
+      const token = localStorage.getItem('token');
+      // const token = Cookies.get('token');
       if (token) {
-        Cookies.remove('token', {
-          path: '/',
-          domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'strict',
-        });
+        // Cookies.remove('token', {
+        //   path: '/',
+        //   domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
+        //   secure: process.env.NODE_ENV === 'production',
+        //   sameSite: 'strict',
+        // });
+        localStorage.removeItem('token');
       }
       router.push('/login');
     }

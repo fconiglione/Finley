@@ -68,8 +68,9 @@ export default function NetWorth() {
     const fetchNetWorthData = async () => {
         try {
             setLoading(true);
-            const token = Cookies.get('token');
-            
+            // const token = localStorage.getItem('token');
+            const token = localStorage.getItem('token');
+
             if (!token) {
                 setError('Please log in to view your net worth data.');
                 setLoading(false);
@@ -102,7 +103,8 @@ export default function NetWorth() {
 
     const addAsset = async (assetData: Omit<Asset, 'id' | 'category'>) => {
         try {
-            const token = Cookies.get('token');
+            // const token = localStorage.getItem('token');
+            const token = localStorage.getItem('token');
             const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
             
             const response = await axios.post(`${baseURL}/v1/api/data/assets`, {
@@ -131,7 +133,7 @@ export default function NetWorth() {
 
     const updateAsset = async (id: string, assetData: Partial<Asset>) => {
         try {
-            const token = Cookies.get('token');
+            const token = localStorage.getItem('token');
             const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
             
             const response = await axios.put(`${baseURL}/v1/api/data/assets/${id}`, {
@@ -163,7 +165,7 @@ export default function NetWorth() {
     const deleteAsset = async (id: string) => {
         if (!confirm('Are you sure you want to delete this asset?')) return;
         try {
-            const token = Cookies.get('token');
+            const token = localStorage.getItem('token');
             const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
             
             await axios.delete(`${baseURL}/v1/api/data/assets/${id}`, {
@@ -195,7 +197,7 @@ export default function NetWorth() {
 
     const addLiability = async (liabilityData: Omit<Liability, 'id' | 'category'>) => {
         try {
-            const token = Cookies.get('token');
+            const token = localStorage.getItem('token');
             const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
             
             const response = await axios.post(`${baseURL}/v1/api/data/liabilities`, {
@@ -224,7 +226,7 @@ export default function NetWorth() {
 
     const updateLiability = async (id: string, liabilityData: Partial<Liability>) => {
         try {
-            const token = Cookies.get('token');
+            const token = localStorage.getItem('token');
             const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
             
             const response = await axios.put(`${baseURL}/v1/api/data/liabilities/${id}`, {
@@ -256,7 +258,7 @@ export default function NetWorth() {
     const deleteLiability = async (id: string) => {
         if (!confirm('Are you sure you want to delete this liability?')) return;
         try {
-            const token = Cookies.get('token');
+            const token = localStorage.getItem('token');
             const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
             
             await axios.delete(`${baseURL}/v1/api/data/liabilities/${id}`, {

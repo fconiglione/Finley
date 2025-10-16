@@ -13,7 +13,8 @@ export default function Dashboard() {
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                const token = Cookies.get('token');
+                // const token = Cookies.get('token');
+                const token = localStorage.getItem('token');
                 if (!token) {
                     window.location.href = '/login';
                     return;
@@ -30,7 +31,9 @@ export default function Dashboard() {
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching user profile:', error);
-                Cookies.remove('token');
+
+                // Cookies.remove('token');
+                localStorage.removeItem('token');
                 window.location.href = '/login';
             }
         };

@@ -55,7 +55,8 @@ export default function Insights() {
 
         // Simulate API call to your Python backend
         try {
-            const token = Cookies.get('token');
+            // const token = Cookies.get('token');
+            const token = localStorage.getItem('token');
             if (!token) {
                 window.location.href = '/login';
                 return;
