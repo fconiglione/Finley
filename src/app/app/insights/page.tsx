@@ -71,7 +71,7 @@ export default function Insights() {
                 const botResponse = {
                     id: Date.now() + 1,
                     type: 'bot',
-                    message: response.data.message,
+                    message: response.data,
                     timestamp: new Date()
                 };
                 setMessages(prev => [...prev, botResponse]);
