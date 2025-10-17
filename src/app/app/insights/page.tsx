@@ -19,12 +19,29 @@ export default function Insights() {
     const [isTyping, setIsTyping] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
+    const formatMessage = (text: string) => { 
+        // Convert **bold** to <strong>
+        text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        
+        // Convert *italic* to <em>
+        text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        
+        // Convert # headers to proper headings
+        text = text.replace(/^### (.*$)/gm, '<h3 class="text-lg font-semibold mt-4 mb-2">$1</h3>');
+        text = text.replace(/^## (.*$)/gm, '<h2 class="text-xl font-semibold mt-4 mb-2">$1</h2>');
+        text = text.replace(/^# (.*$)/gm, '<h1 class="text-2xl font-bold mt-4 mb-2">$1</h1>');
+        
+        // Convert line breaks to <br>
+        text = text.replace(/\n/g, '<br>');
+        
+        return text;
+    }
+
     // Sample suggested questions
     const suggestedQuestions = [
         "How is my net worth trending?",
         "What are my biggest assets?",
         "Where should I focus to improve?",
-        "How do I compare to others my age?",
         "What's my debt-to-asset ratio?"
     ];
 
@@ -142,7 +159,10 @@ export default function Insights() {
                                             ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
                                             : 'bg-white text-gray-800 border border-gray-200'
                                     }`}>
-                                        <p className="leading-relaxed">{message.message}</p>
+                                        <div 
+                                            className="leading-relaxed" 
+                                            dangerouslySetInnerHTML={{ __html: formatMessage(message.message) }}
+                                        />
                                         <p className={`text-xs mt-2 ${
                                             message.type === 'user' ? 'text-blue-100' : 'text-gray-500'
                                         }`}>
