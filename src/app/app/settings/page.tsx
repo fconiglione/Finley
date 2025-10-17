@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import Cookies from 'js-cookie'
-import Loading from '../../components/Loading/Loading';
+import Loading from '../../components/Loading/Loading2';
 import axios from 'axios';
 import Sidebar from '../../components/Sidebar/Sidebar';
 
