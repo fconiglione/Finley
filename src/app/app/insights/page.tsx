@@ -7,17 +7,50 @@ import Sidebar from '../../components/Sidebar/Sidebar';
 
 export default function Insights() {
     const [sidebarOpen, setSidebarOpen] = useState(true);
-    const [messages, setMessages] = useState([
-        {
-            id: 1,
-            type: 'bot',
-            message: "Hey there! 👋 I'm Finley, your friendly AI finance buddy! I've been looking at your net worth data and I'm ready to help you understand your financial picture better. What would you like to know?",
-            timestamp: new Date()
-        }
-    ]);
+    const [messages, setMessages] = useState<any[]>([]);
     const [inputMessage, setInputMessage] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    // Load messages from localStorage on mount
+    useEffect(() => {
+        const savedMessages = localStorage.getItem('finley_chat_history');
+        if (savedMessages) {
+            try {
+                const parsedMessages = JSON.parse(savedMessages);
+                // Convert timestamp strings back to Date objects
+                const messagesWithDates = parsedMessages.map((msg: any) => ({
+                    ...msg,
+                    timestamp: new Date(msg.timestamp)
+                }));
+                setMessages(messagesWithDates);
+            } catch (error) {
+                console.error('Error loading chat history:', error);
+                // Set default message if parsing fails
+                setMessages([{
+                    id: 1,
+                    type: 'bot',
+                    message: "Hey there! 👋 I'm Finley, your friendly AI finance buddy! I've been looking at your net worth data and I'm ready to help you understand your financial picture better. What would you like to know?",
+                    timestamp: new Date()
+                }]);
+            }
+        } else {
+            // Set default message for first visit
+            setMessages([{
+                id: 1,
+                type: 'bot',
+                message: "Hey there! 👋 I'm Finley, your friendly AI finance buddy! I've been looking at your net worth data and I'm ready to help you understand your financial picture better. What would you like to know?",
+                timestamp: new Date()
+            }]);
+        }
+    }, []);
+
+    // Save messages to localStorage whenever messages change (but not on initial load)
+    useEffect(() => {
+        if (messages.length > 0) {
+            localStorage.setItem('finley_chat_history', JSON.stringify(messages));
+        }
+    }, [messages]);
 
     const formatMessage = (text: string) => { 
         // Convert **bold** to <strong>
@@ -115,6 +148,18 @@ export default function Insights() {
         }
     };
 
+    const clearChatHistory = () => {
+        if (confirm('Are you sure you want to clear your chat history? This action cannot be undone.')) {
+            localStorage.removeItem('finley_chat_history');
+            setMessages([{
+                id: Date.now(),
+                type: 'bot',
+                message: "Hey there! 👋 I'm Finley, your friendly AI finance buddy! I've been looking at your net worth data and I'm ready to help you understand your financial picture better. What would you like to know?",
+                timestamp: new Date()
+            }]);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50">
             <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
@@ -124,14 +169,28 @@ export default function Insights() {
                 <div className="flex flex-col h-screen">
                     {/* Header */}
                     <div className={`bg-white shadow-sm border-b p-6 transition-all duration-300 ease-in-out ${!sidebarOpen ? 'pl-[8%]' : ''}`}>
-                        <div className="flex items-center space-x-4">
-                            <div className="w-12 h-12 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full flex items-center justify-center p-2">
-                                <img src="/logo.png" alt="Finley" className="w-full h-full object-contain" />
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-4">
+                                <div className="w-12 h-12 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full flex items-center justify-center p-2">
+                                    <img src="/logo.png" alt="Finley" className="w-full h-full object-contain" />
+                                </div>
+                                <div>
+                                    <h1 className="text-2xl font-bold text-gray-900">Chat with Finley</h1>
+                                    <p className="text-gray-600">Ask me anything about your financial situation!</p>
+                                </div>
                             </div>
-                            <div>
-                                <h1 className="text-2xl font-bold text-gray-900">Chat with Finley</h1>
-                                <p className="text-gray-600">Ask me anything about your financial situation!</p>
-                            </div>
+                            
+                            {/* Clear Chat History Button */}
+                            <button
+                                onClick={clearChatHistory}
+                                className="flex items-center space-x-2 px-4 py-2 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg text-red-700 hover:text-red-800 transition-colors cursor-pointer"
+                                title="Clear chat history"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                                <span className="text-sm font-medium">Clear Chat</span>
+                            </button>
                         </div>
                     </div>
 
@@ -239,7 +298,7 @@ export default function Insights() {
                         
                         <div className="text-center mt-3">
                             <p className="text-xs text-gray-500">
-                                Due to privacy restrictions, chats are not stored and can only be accessed during your current session.
+                                Chat history is saved locally during your session and will be cleared when you log out.
                             </p>
                         </div>
                     </div>

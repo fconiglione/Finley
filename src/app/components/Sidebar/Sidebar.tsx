@@ -72,6 +72,8 @@ export default function Sidebar({ isOpen = true, onToggle }: SidebarProps) {
         //   sameSite: 'strict',
         // });
         localStorage.removeItem('token');
+        // Clear chat history on logout
+        localStorage.removeItem('finley_chat_history');
       }
       router.push('/login');
     }
