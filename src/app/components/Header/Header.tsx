@@ -30,7 +30,7 @@ const Header = () => {
             About
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-teal-400 transition-all group-hover:w-full"></span>
           </Link>
-          <Link href="#feedback" className="text-gray-600 hover:text-teal-600 transition-colors font-medium relative group cursor-pointer">
+          <Link href="https://forms.gle/1HLa4753eSqgBUbLA" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-teal-600 transition-colors font-medium relative group cursor-pointer">
             Feedback
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-teal-400 transition-all group-hover:w-full"></span>
           </Link>
@@ -94,7 +94,7 @@ const Header = () => {
               About
             </Link>
             <Link 
-              href="#feedback" 
+              href="https://forms.gle/1HLa4753eSqgBUbLA" target="_blank" rel="noopener noreferrer" 
               className="block text-gray-600 hover:text-teal-600 transition-colors font-medium py-2 cursor-pointer"
               onClick={() => setIsMenuOpen(false)}
             >

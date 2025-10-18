@@ -28,7 +28,7 @@ const Footer = () => {
               <li><a href="#features" className="hover:text-white transition-colors cursor-pointer">Features</a></li>
               <li><a href="#how-it-works" className="hover:text-white transition-colors cursor-pointer">How it Works</a></li>
               <li><a href="#" className="hover:text-white transition-colors cursor-pointer">About</a></li>
-              <li><a href="mailto:support@finley.com" className="hover:text-white transition-colors cursor-pointer">Feedback Form</a></li>
+              <li><a href="https://forms.gle/1HLa4753eSqgBUbLA" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors cursor-pointer">Feedback Form</a></li>
             </ul>
           </div>
         </div>
