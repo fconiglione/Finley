@@ -4,8 +4,10 @@ import Cookies from 'js-cookie'
 import Loading from '../../components/Loading/Loading2';
 import axios from 'axios';
 import Sidebar from '../../components/Sidebar/Sidebar';
+import { useRouter } from 'next/navigation';
 
 export default function Settings() {
+    const router = useRouter();
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [activeTab, setActiveTab] = useState('profile');
     const [user, setUser] = useState({
@@ -20,6 +22,10 @@ export default function Settings() {
         emailNotifications: true,
         securityAlerts: true
     });
+    const [exportLoading, setExportLoading] = useState(false);
+    const [profileLoading, setProfileLoading] = useState(false);
+    const [notificationsLoading, setNotificationsLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const tabs = [
         { id: 'profile', name: 'Profile', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' },
@@ -27,6 +33,190 @@ export default function Settings() {
         { id: 'security', name: 'Security', icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z' },
         { id: 'privacy', name: 'Privacy', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' }
     ];
+
+    const handleExportData = async () => {
+        setExportLoading(true);
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Please log in to export your data.');
+                return;
+            }
+
+            const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            const response = await axios.get(`${baseURL}/v1/api/data/all`, {
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const dataToExport = {
+                assets: response.data.assets || [],
+                liabilities: response.data.liabilities || [],
+                exportedAt: new Date().toISOString(),
+                user: {
+                    name: user.name,
+                    email: user.email,
+                    phone: user.phone,
+                    timezone: user.timezone
+                }
+            };
+
+            const dataStr = JSON.stringify(dataToExport, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `finley-data-export-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Error exporting data:', error);
+            alert('Failed to export data. Please try again.');
+        } finally {
+            setExportLoading(false);
+        }
+    };
+
+    const deleteUserAccount = async () => {
+        if(confirm("Are you sure you want to delete your account? This action is irreversible.")) {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    alert('Please log in to delete your account.');
+                    return;
+                }
+
+                const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+                await axios.delete(`${baseURL}/v1/api/users/delete`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                alert('Your account has been deleted successfully.');
+                localStorage.removeItem('token');
+                router.push('/login');
+            } catch (error) {
+                console.error('Error deleting account:', error);
+                alert('Failed to delete account. Please try again.');
+            }
+        }
+    };
+
+    const saveProfile = async () => {
+        setProfileLoading(true);
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Please log in to save changes.');
+                return;
+            }
+
+            const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            await axios.put(`${baseURL}/v1/api/users/profile/settings`, {
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                timezone: user.timezone,
+                currency: user.currency,
+                language: user.language
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            alert('Profile updated successfully!');
+        } catch (error) {
+            console.error('Error saving profile:', error);
+            alert('Failed to save profile. Please try again.');
+        } finally {
+            setProfileLoading(false);
+        }
+    };
+
+    const saveNotifications = async () => {
+        setNotificationsLoading(true);
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Please log in to save changes.');
+                return;
+            }
+
+            const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            await axios.put(`${baseURL}/v1/api/users/profile/settings/notifications`, {
+                email_notifications: notifications.emailNotifications,
+                security_notifications: notifications.securityAlerts
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            alert('Notification preferences updated successfully!');
+        } catch (error) {
+            console.error('Error saving notifications:', error);
+            alert('Failed to save notification preferences. Please try again.');
+        } finally {
+            setNotificationsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    router.push('/login');
+                    return;
+                }
+
+                const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+                
+                // Fetch user profile
+                const profileResponse = await axios.post(`${baseURL}/v1/api/users/profile`, {}, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                setUser({
+                    name: profileResponse.data.name || '',
+                    email: profileResponse.data.email || '',
+                    phone: profileResponse.data.phone || '',
+                    timezone: profileResponse.data.timezone || 'EST',
+                    currency: profileResponse.data.currency || 'CAD',
+                    language: profileResponse.data.language || 'en'
+                });
+
+                // Fetch notifications (assuming separate endpoint or included in profile)
+                // For now, set defaults; adjust if API provides
+                setNotifications({
+                    emailNotifications: profileResponse.data.email_notifications !== false,
+                    securityAlerts: profileResponse.data.security_notifications !== false
+                });
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                router.push('/login');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, [router]);
+
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50">
@@ -95,7 +285,7 @@ export default function Settings() {
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number (Optional)</label>
                                             <input
                                                 type="tel"
                                                 value={user.phone}
@@ -111,17 +301,21 @@ export default function Settings() {
                                                 onChange={(e) => setUser({...user, timezone: e.target.value})}
                                                 className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent cursor-pointer"
                                             >
-                                                <option value="America/Toronto">Eastern Time (Toronto)</option>
-                                                <option value="America/Vancouver">Pacific Time (Vancouver)</option>
-                                                <option value="America/Edmonton">Mountain Time (Edmonton)</option>
-                                                <option value="America/Winnipeg">Central Time (Winnipeg)</option>
+                                                <option value="EST">Eastern Time (Toronto)</option>
+                                                <option value="PST">Pacific Time (Vancouver)</option>
+                                                <option value="MST">Mountain Time (Edmonton)</option>
+                                                <option value="CST">Central Time (Winnipeg)</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="pt-4">
-                                    <button className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 cursor-pointer">
-                                        Save Changes
+                                    <button 
+                                        onClick={saveProfile}
+                                        disabled={profileLoading}
+                                        className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                                    >
+                                        {profileLoading ? 'Saving...' : 'Save Changes'}
                                     </button>
                                 </div>
                             </div>
@@ -157,6 +351,15 @@ export default function Settings() {
                                         ))}
                                     </div>
                                 </div>
+                                <div className="pt-4">
+                                    <button 
+                                        onClick={saveNotifications}
+                                        disabled={notificationsLoading}
+                                        className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                                    >
+                                        {notificationsLoading ? 'Saving...' : 'Save Preferences'}
+                                    </button>
+                                </div>
                             </div>
                         )}
 
@@ -186,15 +389,19 @@ export default function Settings() {
                                     <div className="space-y-4">
                                         <div className="p-4 bg-gray-50 rounded-xl">
                                             <h4 className="font-medium text-gray-900 mb-2">Data Export</h4>
-                                            <p className="text-sm text-gray-600 mb-4">Download a copy of your financial data</p>
-                                            <button className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-200 cursor-pointer">
-                                                Export Data
+                                            <p className="text-sm text-gray-600 mb-4">Download a copy of your financial data as a JSON file</p>
+                                            <button 
+                                                onClick={handleExportData}
+                                                disabled={exportLoading}
+                                                className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                                            >
+                                                {exportLoading ? 'Exporting...' : 'Export Data'}
                                             </button>
                                         </div>
                                         <div className="p-4 bg-gray-50 rounded-xl">
                                             <h4 className="font-medium text-gray-900 mb-2">Delete Account</h4>
                                             <p className="text-sm text-gray-600 mb-4">Permanently delete your account and all data</p>
-                                            <button className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-200 cursor-pointer">
+                                            <button onClick={deleteUserAccount} className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-200 cursor-pointer">
                                                 Delete Account
                                             </button>
                                         </div>
