@@ -98,11 +98,17 @@ Finley is your friendly AI finance buddy that makes tracking your net worth simp
 
 ### Built With
 
+**Frontend:**
 * [![Next][Next.js]][Next-url]
 * [![React][React.js]][React-url]
 * [![TypeScript][TypeScript.js]][TypeScript-url]
 * [![TailwindCSS][TailwindCSS.com]][TailwindCSS-url]
 * [![Heroicons][Heroicons.com]][Heroicons-url]
+
+**Backend:**
+* [![Node.js][Node.js]][Node-url] - Core API (Express.js)
+* [![Python][Python.js]][Python-url] - Data API with Hugging Face AI integration
+* [![PostgreSQL][PostgreSQL.js]][PostgreSQL-url] - Database
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -119,8 +125,10 @@ Try Finley right now at: **[https://dev-finley.vercel.app/](https://dev-finley.v
 
 Finley uses two backend services that may need to be spun up (delays can be expected):
 
-- **Core API**: [https://finley-core-api.onrender.com/](https://finley-core-api.onrender.com/)
-- **Data API**: [https://finley-data-api.onrender.com/](https://finley-data-api.onrender.com/)
+- **Core API**: [https://finley-core-api.onrender.com/](https://finley-core-api.onrender.com/) - Built with Node.js/Express
+- **Data API**: [https://finley-data-api.onrender.com/](https://finley-data-api.onrender.com/) - Built with Python and Hugging Face for AI integration
+
+**Database**: PostgreSQL is used as the primary database for all data storage and retrieval.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -217,6 +225,9 @@ Project Link: [https://github.com/fconiglione/Finley](https://github.com/fconigl
 * [Heroicons](https://heroicons.com/) - Beautiful hand-crafted SVG icons
 * [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework
 * [Next.js](https://nextjs.org/) - The React framework for production
+* [Express.js](https://expressjs.com/) - Fast, unopinionated, minimalist web framework for Node.js
+* [Hugging Face](https://huggingface.co/) - AI model platform for the Data API
+* [PostgreSQL](https://www.postgresql.org/) - Advanced open source relational database
 * [Best README Template](https://github.com/othneildrew/Best-README-Template) - Template used for this README
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -249,3 +260,9 @@ Project Link: [https://github.com/fconiglione/Finley](https://github.com/fconigl
 [TailwindCSS-url]: https://tailwindcss.com/
 [Heroicons.com]: https://img.shields.io/badge/Heroicons-000000?style=for-the-badge&logo=heroicons&logoColor=white
 [Heroicons-url]: https://heroicons.com/
+[Node.js]: https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white
+[Node-url]: https://nodejs.org/
+[Python.js]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white
+[Python-url]: https://www.python.org/
+[PostgreSQL.js]: https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white
+[PostgreSQL-url]: https://www.postgresql.org/
