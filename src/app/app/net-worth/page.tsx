@@ -592,7 +592,7 @@ export default function NetWorth() {
                             <div className="flex space-x-3">
                                 <button
                                     type="submit"
-                                    className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                                    className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors cursor-pointer"
                                 >
                                     Add Asset
                                 </button>
@@ -602,7 +602,7 @@ export default function NetWorth() {
                                         setShowAddAsset(false);
                                         setNewAsset({ name: '', current_value: '', description: '' });
                                     }}
-                                    className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-400 transition-colors"
+                                    className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-400 transition-colors cursor-pointer"
                                 >
                                     Cancel
                                 </button>
@@ -654,7 +654,7 @@ export default function NetWorth() {
                             <div className="flex space-x-3">
                                 <button
                                     type="submit"
-                                    className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-red-700 transition-colors"
+                                    className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-red-700 transition-colors cursor-pointer"
                                 >
                                     Add Liability
                                 </button>
@@ -664,7 +664,7 @@ export default function NetWorth() {
                                         setShowAddLiability(false);
                                         setNewLiability({ name: '', current_value: '', description: '' });
                                     }}
-                                    className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-400 transition-colors"
+                                    className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-400 transition-colors cursor-pointer"
                                 >
                                     Cancel
                                 </button>
@@ -718,7 +718,7 @@ export default function NetWorth() {
                             <div className="flex space-x-3">
                                 <button
                                     type="submit"
-                                    className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                                    className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors cursor-pointer"
                                 >
                                     Update Asset
                                 </button>
@@ -728,7 +728,7 @@ export default function NetWorth() {
                                         setShowEditAsset(false);
                                         setEditingAsset(null);
                                     }}
-                                    className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-400 transition-colors"
+                                    className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-400 transition-colors cursor-pointer"
                                 >
                                     Cancel
                                 </button>
@@ -782,7 +782,7 @@ export default function NetWorth() {
                             <div className="flex space-x-3">
                                 <button
                                     type="submit"
-                                    className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-red-700 transition-colors"
+                                    className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-red-700 transition-colors cursor-pointer"
                                 >
                                     Update Liability
                                 </button>
@@ -792,7 +792,7 @@ export default function NetWorth() {
                                         setShowEditLiability(false);
                                         setEditingLiability(null);
                                     }}
-                                    className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-400 transition-colors"
+                                    className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-400 transition-colors cursor-pointer"
                                 >
                                     Cancel
                                 </button>

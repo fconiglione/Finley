@@ -107,12 +107,12 @@ export default function LoginPage() {
                 </div>
 
                 <div className="text-sm">
-                  <Link
-                    href="/forgot-password"
-                    className="font-bold text-teal-600 hover:text-emerald-500 transition-colors duration-200"
+                  <button
+                    onClick={() => alert('Forgot password flow coming soon! Please contact support for assistance.')}
+                    className="font-bold text-teal-600 hover:text-emerald-500 transition-colors duration-200 cursor-pointer"
                   >
                     Forgot password?
-                  </Link>
+                  </button>
                 </div>
               </div>
 
