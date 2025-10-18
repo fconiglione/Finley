@@ -143,14 +143,14 @@ export default function RegisterPage() {
                   <label htmlFor="terms" className="text-gray-900 cursor-pointer">
                     I agree to Finley's{' '}
                     <Link
-                      href="/terms"
+                      href="/legal/terms"
                       className="font-bold text-teal-600 hover:text-emerald-500 transition-colors duration-200"
                     >
                       Terms of Service
                     </Link>{' '}
                     and{' '}
                     <Link
-                      href="/privacy"
+                      href="/legal/privacy"
                       className="font-bold text-teal-600 hover:text-emerald-500 transition-colors duration-200"
                     >
                       Privacy Policy
