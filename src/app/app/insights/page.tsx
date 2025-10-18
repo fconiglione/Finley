@@ -1,13 +1,25 @@
 'use client'
 import React, { useState, useEffect, useRef } from 'react'
-import Cookies from 'js-cookie'
-import Loading from '../../components/Loading/Loading2';
 import axios from 'axios';
 import Sidebar from '../../components/Sidebar/Sidebar';
 
+interface Message {
+    id: number;
+    type: 'user' | 'bot';
+    message: string;
+    timestamp: Date;
+}
+
+interface StoredMessage {
+    id: number;
+    type: 'user' | 'bot';
+    message: string;
+    timestamp: string;
+}
+
 export default function Insights() {
     const [sidebarOpen, setSidebarOpen] = useState(true);
-    const [messages, setMessages] = useState<any[]>([]);
+    const [messages, setMessages] = useState<Message[]>([]);
     const [inputMessage, setInputMessage] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -17,9 +29,9 @@ export default function Insights() {
         const savedMessages = localStorage.getItem('finley_chat_history');
         if (savedMessages) {
             try {
-                const parsedMessages = JSON.parse(savedMessages);
+                const parsedMessages = JSON.parse(savedMessages) as StoredMessage[];
                 // Convert timestamp strings back to Date objects
-                const messagesWithDates = parsedMessages.map((msg: any) => ({
+                const messagesWithDates = parsedMessages.map((msg: StoredMessage) => ({
                     ...msg,
                     timestamp: new Date(msg.timestamp)
                 }));
@@ -92,7 +104,7 @@ export default function Insights() {
         if (!messageToSend) return;
 
         // Add user message
-        const userMessage = {
+        const userMessage: Message = {
             id: Date.now(),
             type: 'user',
             message: messageToSend,
@@ -118,10 +130,10 @@ export default function Insights() {
             });
             // Replace this with your actual API call
             setTimeout(() => {
-                const botResponse = {
+                const botResponse: Message = {
                     id: Date.now() + 1,
                     type: 'bot',
-                    message: response.data,
+                    message: response.data as string,
                     timestamp: new Date()
                 };
                 setMessages(prev => [...prev, botResponse]);
@@ -130,7 +142,7 @@ export default function Insights() {
 
         } catch (error) {
             console.error('Error sending message:', error);
-            const errorResponse = {
+            const errorResponse: Message = {
                 id: Date.now() + 1,
                 type: 'bot',
                 message: "Oops! I'm having trouble connecting right now. Please try again in a moment! 😅",

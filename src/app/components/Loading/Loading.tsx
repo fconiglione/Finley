@@ -20,7 +20,7 @@ export default function Loading() {
     // Set initial random fact
     const getRandomFact = () => facts[Math.floor(Math.random() * facts.length)]
     setCurrentFact(getRandomFact())
-  }, [])
+  }, [facts])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 flex items-center justify-center fixed top-0 left-0 w-full z-50">
