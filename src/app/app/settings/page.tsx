@@ -26,6 +26,13 @@ export default function Settings() {
     const [profileLoading, setProfileLoading] = useState(false);
     const [notificationsLoading, setNotificationsLoading] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [showChangePassword, setShowChangePassword] = useState(false);
+    const [passwordData, setPasswordData] = useState({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+    });
+    const [passwordLoading, setPasswordLoading] = useState(false);
 
     const tabs = [
         { id: 'profile', name: 'Profile', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' },
@@ -167,6 +174,46 @@ export default function Settings() {
             alert('Failed to save notification preferences. Please try again.');
         } finally {
             setNotificationsLoading(false);
+        }
+    };
+
+    const changePassword = async () => {
+        if (passwordData.newPassword !== passwordData.confirmPassword) {
+            alert('New passwords do not match.');
+            return;
+        }
+        if (passwordData.newPassword.length < 8) {
+            alert('New password must be at least 8 characters long.');
+            return;
+        }
+
+        setPasswordLoading(true);
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Please log in to change your password.');
+                return;
+            }
+
+            const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+            await axios.put(`${baseURL}/v1/api/users/change-password`, {
+                current_password: passwordData.currentPassword,
+                new_password: passwordData.newPassword
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            alert('Password changed successfully!');
+            setShowChangePassword(false);
+            setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+        } catch (error) {
+            console.error('Error changing password:', error);
+            alert('Failed to change password. Please check your current password and try again.');
+        } finally {
+            setPasswordLoading(false);
         }
     };
 
@@ -372,7 +419,10 @@ export default function Settings() {
                                         <div className="p-4 bg-gray-50 rounded-xl">
                                             <h4 className="font-medium text-gray-900 mb-2">Change Password</h4>
                                             <p className="text-sm text-gray-600 mb-4">Update your password to keep your account secure</p>
-                                            <button className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-200 cursor-pointer">
+                                            <button 
+                                                onClick={() => setShowChangePassword(true)}
+                                                className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-200 cursor-pointer"
+                                            >
                                                 Change Password
                                             </button>
                                         </div>
@@ -425,6 +475,70 @@ export default function Settings() {
                         )}
                     </div>
                 </div>
+
+                {/* Change Password Modal */}
+                {showChangePassword && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+                            <h3 className="text-xl font-bold mb-4">Change Password</h3>
+                            <form onSubmit={(e) => {
+                                e.preventDefault();
+                                changePassword();
+                            }}>
+                                <div className="mb-4">
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Current Password</label>
+                                    <input
+                                        type="password"
+                                        value={passwordData.currentPassword}
+                                        onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        required
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">New Password</label>
+                                    <input
+                                        type="password"
+                                        value={passwordData.newPassword}
+                                        onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        required
+                                        minLength={8}
+                                    />
+                                </div>
+                                <div className="mb-6">
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Confirm New Password</label>
+                                    <input
+                                        type="password"
+                                        value={passwordData.confirmPassword}
+                                        onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        required
+                                    />
+                                </div>
+                                <div className="flex space-x-3">
+                                    <button
+                                        type="submit"
+                                        disabled={passwordLoading}
+                                        className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        {passwordLoading ? 'Changing...' : 'Change Password'}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setShowChangePassword(false);
+                                            setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+                                        }}
+                                        className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-400 transition-colors"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     )
