@@ -2,6 +2,7 @@ import Header from './components/Header/Header';
 import Hero from './components/Hero/Hero';
 import HowItWorks from './components/HowItWorks/HowItWorks';
 import Footer from './components/Footer/Footer';
+import { ChartBarIcon, PencilIcon, ArrowTrendingUpIcon, LockClosedIcon, XMarkIcon, TrashIcon, CursorArrowRaysIcon, ShieldCheckIcon, BoltIcon, SwatchIcon, SparklesIcon, BuildingLibraryIcon } from '@heroicons/react/24/outline';
 
 export default function Home() {
   return (
@@ -27,7 +28,7 @@ export default function Home() {
             {/* Feature 2 */}
             <div className="text-center p-6 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
               <div className="w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-3xl">📊</span>
+                <ChartBarIcon className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-4">Net Worth Tracking!</h3>
               <p className="text-gray-600">Easily track all your assets and liabilities in one place - watch your net worth grow over time!</p>
@@ -36,7 +37,7 @@ export default function Home() {
             {/* Feature 5 */}
             <div className="text-center p-6 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
               <div className="w-16 h-16 bg-gradient-to-r from-teal-400 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-3xl">✏️</span>
+                <PencilIcon className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-4">Easy Manual Entry!</h3>
               <p className="text-gray-600">Simply enter your financial information manually - quick, secure, and you stay in complete control!</p>
@@ -45,7 +46,7 @@ export default function Home() {
             {/* Feature 6 */}
             <div className="text-center p-6 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
               <div className="w-16 h-16 bg-gradient-to-r from-rose-400 to-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-3xl">📈</span>
+                <ArrowTrendingUpIcon className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-4">Financial Insights!</h3>
               <p className="text-gray-600">Get personalized insights about your financial health and tips to improve your net worth!</p>
@@ -58,7 +59,7 @@ export default function Home() {
       <section className="py-16 lg:py-24 bg-gradient-to-br from-green-50 to-emerald-50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="text-6xl mb-6">🔐</div>
+            <LockClosedIcon className="w-16 h-16 mx-auto mb-6 text-emerald-500" />
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
               Privacy-First Promise!
             </h2>
@@ -70,7 +71,7 @@ export default function Home() {
             <div className="grid md:grid-cols-3 gap-8 mt-12">
               <div className="text-center bg-white rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
                 <div className="w-16 h-16 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-3xl">🚫</span>
+                  <XMarkIcon className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2">No Bank Passwords!</h3>
                 <p className="text-gray-600 text-sm">Manual entry means your login info stays safely with you where it belongs - no connections needed!</p>
@@ -78,7 +79,7 @@ export default function Home() {
               
               <div className="text-center bg-white rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
                 <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-3xl">🔒</span>
+                  <LockClosedIcon className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2">Fort Knox Level Security!</h3>
                 <p className="text-gray-600 text-sm">Everything is encrypted tighter than a pickle jar - your data is super safe with me!</p>
@@ -86,7 +87,7 @@ export default function Home() {
               
               <div className="text-center bg-white rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
                 <div className="w-16 h-16 bg-gradient-to-r from-pink-400 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-3xl">🗑️</span>
+                  <TrashIcon className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2">You're in Control!</h3>
                 <p className="text-gray-600 text-sm">Your data, your rules! Delete everything anytime with just one click - no questions asked!</p>
@@ -100,7 +101,7 @@ export default function Home() {
       <section className="py-16 lg:py-24 bg-gradient-to-br from-blue-50 to-indigo-50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="text-6xl mb-6">✏️</div>
+            <PencilIcon className="w-16 h-16 mx-auto mb-6 text-emerald-500" />
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
               Why Manual Entry is Actually Better!
             </h2>
@@ -111,7 +112,7 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-8 mt-12">
               <div className="text-left bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-300">
                 <div className="w-16 h-16 bg-gradient-to-r from-emerald-400 to-green-500 rounded-full flex items-center justify-center mb-6">
-                  <span className="text-3xl">🎯</span>
+                  <CursorArrowRaysIcon className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">You Know Your Numbers!</h3>
                 <p className="text-gray-600">
@@ -122,7 +123,7 @@ export default function Home() {
               
               <div className="text-left bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-300">
                 <div className="w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full flex items-center justify-center mb-6">
-                  <span className="text-3xl">🛡️</span>
+                  <ShieldCheckIcon className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Maximum Security!</h3>
                 <p className="text-gray-600">
@@ -133,7 +134,7 @@ export default function Home() {
               
               <div className="text-left bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-300">
                 <div className="w-16 h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mb-6">
-                  <span className="text-3xl">⚡</span>
+                  <BoltIcon className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Update Anytime!</h3>
                 <p className="text-gray-600">
@@ -144,7 +145,7 @@ export default function Home() {
               
               <div className="text-left bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-300">
                 <div className="w-16 h-16 bg-gradient-to-r from-teal-400 to-cyan-500 rounded-full flex items-center justify-center mb-6">
-                  <span className="text-3xl">🎨</span>
+                  <SwatchIcon className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Your Way, Your Pace!</h3>
                 <p className="text-gray-600">
@@ -180,9 +181,18 @@ export default function Home() {
             </div>
             
             <div className="text-gray-200 text-sm space-y-2">
-              <p>✨ See your complete financial picture in minutes</p>
-              <p>🏦 Professional categories used by major Canadian banks</p>
-              <p>🔒 Maximum privacy with manual entry - no bank connections required</p>
+              <p className="flex items-center justify-center">
+                <SparklesIcon className="w-4 h-4 mr-2" />
+                See your complete financial picture in minutes
+              </p>
+              <p className="flex items-center justify-center">
+                <BuildingLibraryIcon className="w-4 h-4 mr-2" />
+                Professional categories used by major Canadian banks
+              </p>
+              <p className="flex items-center justify-center">
+                <LockClosedIcon className="w-4 h-4 mr-2" />
+                Maximum privacy with manual entry - no bank connections required
+              </p>
             </div>
           </div>
         </div>

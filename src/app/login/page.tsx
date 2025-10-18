@@ -4,6 +4,7 @@ import Link from 'next/link'
 import React from 'react'
 import Cookies from 'js-cookie'
 import Loading from '../components/Loading/Loading';
+import { HandRaisedIcon, LockClosedIcon, SparklesIcon, LightBulbIcon } from '@heroicons/react/24/outline';
 
 export default function LoginPage() {
     const currentYear = new Date().getFullYear();
@@ -45,7 +46,7 @@ export default function LoginPage() {
         <div className={`max-w-md w-full space-y-8`}>
           {/* Header */}
           <div className="text-center">
-            <div className="text-6xl mb-6">👋</div>
+            <HandRaisedIcon className="w-16 h-16 mx-auto mb-6 text-emerald-500" />
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Welcome Back to Finley!
             </h2>
@@ -140,9 +141,18 @@ export default function LoginPage() {
 
           {/* Fun footer text */}
           <div className="text-center text-gray-600 text-sm space-y-1">
-            <p>🔒 Your data is safer than a treasure chest!</p>
-            <p>✨ Privacy-first promise - always!</p>
-            <p>💡 No bank passwords needed - ever!</p>
+            <p className="flex items-center justify-center">
+              <LockClosedIcon className="w-4 h-4 mr-2" />
+              Your data is safer than a treasure chest!
+            </p>
+            <p className="flex items-center justify-center">
+              <SparklesIcon className="w-4 h-4 mr-2" />
+              Privacy-first promise - always!
+            </p>
+            <p className="flex items-center justify-center">
+              <LightBulbIcon className="w-4 h-4 mr-2" />
+              No bank passwords needed - ever!
+            </p>
           </div>
           <div>
               <div className="text-center text-gray-400 text-xs mt-4">

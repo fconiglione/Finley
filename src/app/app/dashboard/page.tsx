@@ -4,6 +4,7 @@ import Cookies from 'js-cookie'
 import Loading from '../../components/Loading/Loading2';
 import axios from 'axios';
 import Sidebar from '../../components/Sidebar/Sidebar';
+import { HandRaisedIcon } from '@heroicons/react/24/outline';
 
 interface Asset {
     id: string;
@@ -92,8 +93,9 @@ export default function Dashboard() {
             <div className={`py-28 px-10 transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-80' : 'ml-0'}`}>
                 {/* Welcome Header */}
                 <div className="bg-white rounded-3xl shadow-lg p-8 mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                        Welcome back, {user?.name}! 👋
+                    <h1 className="text-3xl font-bold text-gray-900 mb-4 flex items-center">
+                        <HandRaisedIcon className="w-8 h-8 mr-3 text-emerald-500" />
+                        Welcome back, {user?.name}!
                     </h1>
                     <p className="text-gray-600">
                         Here's a quick overview of your financial health.

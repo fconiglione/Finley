@@ -1,5 +1,6 @@
 'use client'
 import React from 'react';
+import { BuildingLibraryIcon, CreditCardIcon, ArrowTrendingUpIcon, ArrowRightIcon, CursorArrowRaysIcon, LockClosedIcon, BoltIcon } from '@heroicons/react/24/outline';
 
 const HowItWorks = () => {
   const steps = [
@@ -7,7 +8,7 @@ const HowItWorks = () => {
       step: '01',
       title: 'Enter Your Assets',
       description: 'Add your bank accounts, investments, property, and other valuable assets. Take your time - you\'re in complete control!',
-      icon: '🏦',
+      icon: BuildingLibraryIcon,
       bgColor: 'bg-gradient-to-br from-emerald-400 to-teal-500',
       textColor: 'text-white'
     },
@@ -15,7 +16,7 @@ const HowItWorks = () => {
       step: '02', 
       title: 'Add Your Liabilities',
       description: 'Input your debts like credit cards, loans, and mortgages. Don\'t worry - knowing where you stand is the first step to improvement!',
-      icon: '💳',
+      icon: CreditCardIcon,
       bgColor: 'bg-gradient-to-br from-purple-400 to-pink-400',
       textColor: 'text-white'
     },
@@ -23,7 +24,7 @@ const HowItWorks = () => {
       step: '03',
       title: 'See Your Net Worth',
       description: 'Watch as I calculate your total net worth and provide personalized insights to help you grow your wealth over time!',
-      icon: '📈',
+      icon: ArrowTrendingUpIcon,
       bgColor: 'bg-gradient-to-br from-yellow-400 to-orange-400',
       textColor: 'text-white'
     }
@@ -54,7 +55,7 @@ const HowItWorks = () => {
                   
                   {/* Icon */}
                   <div className="flex justify-center mb-6">
-                    <span className="text-6xl">{step.icon}</span>
+                    <step.icon className="w-16 h-16" />
                   </div>
                   
                   {/* Content */}
@@ -71,9 +72,7 @@ const HowItWorks = () => {
                 {/* Connector Arrow (desktop only) */}
                 {index < steps.length - 1 && (
                   <div className="hidden md:block absolute top-1/2 -right-6 transform -translate-y-1/2 z-10">
-                    <div className="w-8 h-8 text-teal-500 animate-pulse">
-                      <span className="text-3xl">➡️</span>
-                    </div>
+                    <ArrowRightIcon className="w-8 h-8 text-teal-500 animate-pulse" />
                   </div>
                 )}
               </div>
@@ -85,7 +84,7 @@ const HowItWorks = () => {
         <div className="mt-16">
           <div className="bg-white rounded-3xl p-8 shadow-xl max-w-4xl mx-auto border-4 border-yellow-200">
             <div className="text-center mb-8">
-              <div className="text-4xl mb-4">🎯</div>
+              <CursorArrowRaysIcon className="w-16 h-16 mx-auto mb-4 text-emerald-500" />
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
                 Why Manual Entry is Better
               </h3>
@@ -97,7 +96,7 @@ const HowItWorks = () => {
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="text-center">
                 <div className="w-12 h-12 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-xl">🔒</span>
+                  <LockClosedIcon className="w-6 h-6 text-white" />
                 </div>
                 <h4 className="font-semibold text-gray-900 mb-2">Maximum Privacy</h4>
                 <p className="text-sm text-gray-600">No bank passwords or connections - your data stays completely private!</p>
@@ -105,7 +104,7 @@ const HowItWorks = () => {
               
               <div className="text-center">
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-xl">⚡</span>
+                  <BoltIcon className="w-6 h-6 text-white" />
                 </div>
                 <h4 className="font-semibold text-gray-900 mb-2">Update Anytime</h4>
                 <p className="text-sm text-gray-600">Add new assets or pay off debt? Update your net worth instantly!</p>
@@ -113,7 +112,7 @@ const HowItWorks = () => {
               
               <div className="text-center">
                 <div className="w-12 h-12 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-xl">🎯</span>
+                  <CursorArrowRaysIcon className="w-6 h-6 text-white" />
                 </div>
                 <h4 className="font-semibold text-gray-900 mb-2">Stay Aware</h4>
                 <p className="text-sm text-gray-600">Manual entry helps you stay conscious of your financial situation!</p>

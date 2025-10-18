@@ -1,6 +1,7 @@
 'use client'
 import React from 'react';
 import Link from 'next/link';
+import { HandRaisedIcon, LockClosedIcon, PencilIcon, BuildingLibraryIcon, HeartIcon, ShieldCheckIcon, CheckCircleIcon, BoltIcon } from '@heroicons/react/24/outline';
 
 const Hero = () => {
   return (
@@ -14,7 +15,7 @@ const Hero = () => {
         <div className="max-w-4xl mx-auto text-center">
           {/* Friendly greeting */}
           <div className="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 mb-6">
-            <span className="text-2xl mr-2">👋</span>
+            <HandRaisedIcon className="w-6 h-6 mr-2 text-white" />
             <span className="font-medium">Hey there! Ready to track your net worth?</span>
           </div>
           
@@ -33,13 +34,16 @@ const Hero = () => {
           {/* Key Benefits */}
           <div className="flex flex-wrap justify-center gap-6 mb-10 text-sm md:text-base">
             <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-              <span>🔒 Super Secure</span>
+              <LockClosedIcon className="w-4 h-4" />
+              <span>Super Secure</span>
             </div>
             <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-              <span>✏️ Manual Entry</span>
+              <PencilIcon className="w-4 h-4" />
+              <span>Manual Entry</span>
             </div>
             <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-              <span>🏦 No Bank Connections</span>
+              <BuildingLibraryIcon className="w-4 h-4" />
+              <span>No Bank Connections</span>
             </div>
           </div>
           
@@ -61,20 +65,21 @@ const Hero = () => {
           
           {/* Trust Indicators */}
           <div className="mt-12 pt-8 border-t border-white/30">
-            <p className="text-gray-200 text-sm mb-4">
-              <span className="text-yellow-200">💝</span> Loved by thousands who wanted to understand their financial picture
+            <p className="text-gray-200 text-sm mb-4 flex items-center">
+              <HeartIcon className="w-4 h-4 mr-2 text-yellow-200" />
+              Loved by thousands who wanted to understand their financial picture
             </p>
             <div className="flex justify-center items-center space-x-8 text-gray-200">
               <div className="flex items-center space-x-2">
-                <span className="text-xl">🛡️</span>
+                <ShieldCheckIcon className="w-5 h-5" />
                 <span className="text-sm">Maximum Privacy</span>
               </div>
               <div className="flex items-center space-x-2">
-                <span className="text-xl">✅</span>
+                <CheckCircleIcon className="w-5 h-5" />
                 <span className="text-sm">GDPR Compliant</span>
               </div>
               <div className="flex items-center space-x-2">
-                <span className="text-xl">⚡</span>
+                <BoltIcon className="w-5 h-5" />
                 <span className="text-sm">Track in Minutes</span>
               </div>
             </div>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { BanknotesIcon, SparklesIcon } from '@heroicons/react/24/outline';
 
 export default function Loading() {
   const facts = [
@@ -27,8 +28,8 @@ export default function Loading() {
       <div className="text-center">
         {/* Animated Finley character */}
         <div className="relative mb-8">
-          <div className="text-8xl animate-bounce">💰</div>
-          <div className="absolute -top-2 -right-2 text-2xl animate-spin">✨</div>
+          <BanknotesIcon className="w-24 h-24 mx-auto animate-bounce text-emerald-500" />
+          <SparklesIcon className="absolute -top-2 -right-2 w-8 h-8 animate-spin text-yellow-400" />
         </div>
         
         {/* Loading text */}

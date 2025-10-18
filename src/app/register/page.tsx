@@ -4,6 +4,7 @@ import axios from "axios"
 import Cookies from 'js-cookie'
 import React from 'react'
 import Loading from '../components/Loading/Loading'
+import { SparklesIcon, LockClosedIcon, LightBulbIcon } from '@heroicons/react/24/outline';
 
 export default function RegisterPage() {
     const currentYear = new Date().getFullYear();
@@ -50,7 +51,7 @@ export default function RegisterPage() {
         <div className="max-w-md w-full space-y-8">
           {/* Header */}
           <div className="text-center">
-            <div className="text-6xl mb-6">🎉</div>
+            <SparklesIcon className="w-16 h-16 mx-auto mb-6 text-emerald-500" />
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Let's Be Money Buddies!
             </h2>
@@ -182,9 +183,18 @@ export default function RegisterPage() {
 
           {/* Fun footer text */}
           <div className="text-center text-gray-600 text-sm space-y-1">
-            <p>🔒 Your data is safer than a treasure chest!</p>
-            <p>✨ Privacy-first promise - always!</p>
-            <p>💡 No bank passwords needed - ever!</p>
+            <p className="flex items-center justify-center">
+              <LockClosedIcon className="w-4 h-4 mr-2" />
+              Your data is safer than a treasure chest!
+            </p>
+            <p className="flex items-center justify-center">
+              <SparklesIcon className="w-4 h-4 mr-2" />
+              Privacy-first promise - always!
+            </p>
+            <p className="flex items-center justify-center">
+              <LightBulbIcon className="w-4 h-4 mr-2" />
+              No bank passwords needed - ever!
+            </p>
           </div>
           <div>
               <div className="text-center text-gray-400 text-xs mt-4">

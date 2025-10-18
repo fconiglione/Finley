@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios';
 import Sidebar from '../../components/Sidebar/Sidebar';
+import { UserIcon, LightBulbIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 interface Message {
     id: number;
@@ -42,7 +43,7 @@ export default function Insights() {
                 setMessages([{
                     id: 1,
                     type: 'bot',
-                    message: "Hey there! 👋 I'm Finley, your friendly AI finance buddy! I've been looking at your net worth data and I'm ready to help you understand your financial picture better. What would you like to know?",
+                    message: "Hey there! I'm Finley, your friendly AI finance buddy! I've been looking at your net worth data and I'm ready to help you understand your financial picture better. What would you like to know?",
                     timestamp: new Date()
                 }]);
             }
@@ -51,7 +52,7 @@ export default function Insights() {
             setMessages([{
                 id: 1,
                 type: 'bot',
-                message: "Hey there! 👋 I'm Finley, your friendly AI finance buddy! I've been looking at your net worth data and I'm ready to help you understand your financial picture better. What would you like to know?",
+                message: "Hey there! I'm Finley, your friendly AI finance buddy! I've been looking at your net worth data and I'm ready to help you understand your financial picture better. What would you like to know?",
                 timestamp: new Date()
             }]);
         }
@@ -145,7 +146,7 @@ export default function Insights() {
             const errorResponse: Message = {
                 id: Date.now() + 1,
                 type: 'bot',
-                message: "Oops! I'm having trouble connecting right now. Please try again in a moment! 😅",
+                message: "Oops! I'm having trouble connecting right now. Please try again in a moment!",
                 timestamp: new Date()
             };
             setMessages(prev => [...prev, errorResponse]);
@@ -166,7 +167,7 @@ export default function Insights() {
             setMessages([{
                 id: Date.now(),
                 type: 'bot',
-                message: "Hey there! 👋 I'm Finley, your friendly AI finance buddy! I've been looking at your net worth data and I'm ready to help you understand your financial picture better. What would you like to know?",
+                message: "Hey there! I'm Finley, your friendly AI finance buddy! I've been looking at your net worth data and I'm ready to help you understand your financial picture better. What would you like to know?",
                 timestamp: new Date()
             }]);
         }
@@ -218,7 +219,7 @@ export default function Insights() {
                                             : 'bg-gradient-to-r from-emerald-400 to-teal-500'
                                     }`}>
                                         {message.type === 'user' ? (
-                                            <span className="text-white text-lg">👤</span>
+                                            <UserIcon className="w-5 h-5 text-white" />
                                         ) : (
                                             <img src="/logo.png" alt="Finley" className="w-6 h-6 object-contain" />
                                         )}
@@ -268,7 +269,10 @@ export default function Insights() {
                     {/* Suggested Questions (show when conversation is short) */}
                     {messages.length <= 2 && (
                         <div className={`px-6 pb-4 ${!sidebarOpen ? 'pl-[8%]' : ''}`}>
-                            <p className="text-sm text-gray-600 mb-3">💡 Try asking me:</p>
+                            <p className="text-sm text-gray-600 mb-3 flex items-center">
+                                <LightBulbIcon className="w-4 h-4 mr-2" />
+                                Try asking me:
+                            </p>
                             <div className="flex flex-wrap gap-2">
                                 {suggestedQuestions.map((question, index) => (
                                     <button
