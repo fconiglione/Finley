@@ -11,7 +11,7 @@ const Hero = () => {
       <div className="absolute top-40 right-20 w-16 h-16 bg-pink-300 rounded-full opacity-30 animate-bounce"></div>
       <div className="absolute bottom-20 left-20 w-12 h-12 bg-purple-300 rounded-full opacity-25"></div>
       
-      <div className="container mx-auto px-4 py-16 lg:py-24 relative">
+      <div className="container mx-auto px-4 py-30 relative">
         <div className="max-w-4xl mx-auto text-center">
           {/* Friendly greeting */}
           <div className="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 mb-6">

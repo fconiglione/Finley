@@ -7,6 +7,12 @@ const Header = () => {
 
   return (
     <header className="w-full bg-white shadow-lg border-b-4 border-teal-400 fixed top-0 z-50">
+      {/* Banner mentioning slow loading times due to apis needing to be spun up */}
+      <div className="bg-yellow-100 text-yellow-800 p-2 text-center">
+        <p className="text-sm">
+          <b>Note:</b> Some features may take a moment to load as our backend services are spun up while hosted on free tiers.
+        </p>
+      </div>
       <div className="container mx-auto flex justify-between items-center px-4 py-3 lg:px-6">
         {/* Logo and Brand */}
         <div className="flex items-center">
