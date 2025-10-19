@@ -64,8 +64,8 @@ const Hero = () => {
           </div>
           
           {/* Trust Indicators */}
-          <div className="mt-12 pt-8 border-t border-white/30">
-            <p className="text-gray-200 text-sm mb-4 flex items-center">
+          <div className="mt-12 pt-8 border-t border-white/30 flex items-center flex-col">
+            <p className="text-gray-200 text-sm mb-4 flex items-center text-center">
               <HeartIcon className="w-4 h-4 mr-2 text-yellow-200" />
               Loved by thousands who wanted to understand their financial picture
             </p>
